@@ -8,8 +8,6 @@
         <Version>1.1.1</Version>
         <PublishSingleFile>true</PublishSingleFile>
         <PublishTrimmed>false</PublishTrimmed>
-        <ApplicationIcon>..\fuji.ico</ApplicationIcon>
-        <PackageIcon>..\fuji.png</PackageIcon>
         <PackageReadmeFile>..\ReadMe.md</PackageReadmeFile>
         <SelfContained>false</SelfContained>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
@@ -70,16 +68,5 @@
 
     <ItemGroup Condition="$(IsMacOS) == 'true'">
         <Content Include="Audio/FMOD/libs/osx/**" CopyToOutputDirectory="PreserveNewest" Link="%(Filename)%(Extension)" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Update="..\fuji.png">
-            <Pack>True</Pack>
-            <PackagePath>\</PackagePath>
-        </None>
-        <None Update="..\ReadMe.md">
-            <Pack>True</Pack>
-            <PackagePath>\</PackagePath>
-        </None>
     </ItemGroup>
 </Project>
