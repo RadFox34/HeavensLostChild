@@ -72,3 +72,28 @@
 "classname" "Strawberry"
 "origin" "-184 -168 1560"
 }
+// entity 6
+{
+"classname" "Spring"
+"origin" "-328 120 1480"
+}
+// entity 7
+{
+"classname" "Node"
+"origin" "-56 344 1784"
+"targetname" "TrafficBlock"
+}
+// entity 8
+{
+"classname" "TrafficBlock"
+"target" "TrafficBlock"
+// brush 0
+{
+( -96 304 1472 ) ( -96 305 1472 ) ( -96 304 1473 ) metal_floor_1 0 0 0 1 1
+( -96 304 1472 ) ( -96 304 1473 ) ( -95 304 1472 ) metal_floor_1 0 0 0 1 1
+( -96 304 1472 ) ( -95 304 1472 ) ( -96 305 1472 ) metal_floor_1 0 0 0 1 1
+( -16 384 1488 ) ( -16 385 1488 ) ( -15 384 1488 ) metal_floor_1 0 0 0 1 1
+( -16 384 1488 ) ( -15 384 1488 ) ( -16 384 1489 ) metal_floor_1 0 0 0 1 1
+( -16 384 1488 ) ( -16 384 1489 ) ( -16 385 1488 ) metal_floor_1 0 0 0 1 1
+}
+}
