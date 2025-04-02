@@ -2019,7 +2019,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		if (World.Entry.Submap)
 		{
 			//Allow re-entry of submaps
-			//Save.CurrentRecord.CompletedSubMaps.Add(World.Entry.Map);
+			Save.CurrentRecord.CompletedSubMaps.Add(World.Entry.Map);
 			Game.Instance.Goto(new Transition()
 			{
 				Mode = Transition.Modes.Pop,
