@@ -2016,9 +2016,10 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 
 		yield return 1.2f;
 
-	/*	if (World.Entry.Submap)
+		if (World.Entry.Submap)
 		{
-			Save.CurrentRecord.CompletedSubMaps.Add(World.Entry.Map);
+			//Allow re-entry of submaps
+			//Save.CurrentRecord.CompletedSubMaps.Add(World.Entry.Map);
 			Game.Instance.Goto(new Transition()
 			{
 				Mode = Transition.Modes.Pop,
@@ -2028,9 +2029,20 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 				Saving = true
 			});
 		}
-		else */
+		else
 		{
-			StateMachine.State = States.Normal;
+			//After collecting a strawberry (completing tower section) return to the level select menu
+			Game.Instance.Goto(new Transition()
+			{
+				Mode = Transition.Modes.Replace,
+				Scene = () => new Overworld(true),
+				ToPause = true,
+				ToBlack = new SpotlightWipe(),
+				FromBlack = new SlideWipe(),
+				StopMusic = true,
+				Saving = true
+			});
+			//StateMachine.State = States.Normal;
 		}
 	}
 
@@ -2421,16 +2433,16 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 
 		if (cassette != null)
 		 {
-			//if (World.Entry.Submap)
-			//{
-			//	Game.Instance.Goto(new Transition()
-			//	{
-			//		Mode = Transition.Modes.Pop,
-			//		ToPause = true,
-			//		ToBlack = new SpotlightWipe(),
-			//		StopMusic = true
-			//	});
-			//} 
+			if (World.Entry.Submap)
+			{
+				Game.Instance.Goto(new Transition()
+				{
+					Mode = Transition.Modes.Pop,
+					ToPause = true,
+					ToBlack = new SpotlightWipe(),
+					StopMusic = true
+				});
+			} 
 			//Saves and quits game if you collect a cassette with an empty map property when you're not in a submap
 			if (!Assets.Maps.ContainsKey(cassette.Map))
 			{

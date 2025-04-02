@@ -161,7 +161,7 @@ public class Strawberry : Actor, IHaveModels, IHaveSprites, IPickup, ICastPointS
 
 	public virtual void Pickup(Player player)
 	{
-		if (!IsCollected && !IsCollecting && !IsLocked)
+		if (!IsCollecting && !IsLocked)
 		{
 			Audio.Play(World.Entry.Submap ? Sfx.sfx_collect_strawb_bside : Sfx.sfx_collect_strawb, Position);
 			IsCollecting = true;

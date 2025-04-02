@@ -1,10 +1,50 @@
 [
 	{
-		"ID": "0_FORSAKEN_CITY",
-		"Name": "Forsaken City",
-		"Label": "Created for the 6th anniversary\nby the Celeste Team",
-		"Strawberries": 30,
+		"ID": "0_TUTORIAL",
+		"Name": "Tutorial",
+		"Label": "Placeholder",
+		"Strawberries": 1,
+		"Preview": "Postcards/ForsakenCity",
+		"Map": "0"
+	},
+	{
+		"ID": "1_HEAVEN_TOWER",
+		"Name": "Tower Pt 1",
+		"Label": "Placeholder",
+		"Strawberries": 1,
 		"Preview": "Postcards/ForsakenCity",
 		"Map": "1"
+	},
+	{
+		"ID": "2_HEAVEN_TOWER",
+		"Name": "Tower Pt 2",
+		"Label": "Placeholder",
+		"Strawberries": 1,
+		"Preview": "Postcards/ForsakenCity",
+		"Map": "2"
+	},
+	{
+		"ID": "3_HEAVEN_TOWER",
+		"Name": "Tower Pt 3",
+		"Label": "Placeholder",
+		"Strawberries": 1,
+		"Preview": "Postcards/ForsakenCity",
+		"Map": "3"
+	},
+	{
+		"ID": "4_HEAVEN_TOWER",
+		"Name": "Tower Pt 4",
+		"Label": "Placeholder",
+		"Strawberries": 1,
+		"Preview": "Postcards/ForsakenCity",
+		"Map": "4"
+	},
+	{
+		"ID": "5_FINALE",
+		"Name": "Finale",
+		"Label": "Placeholder",
+		"Strawberries": 1,
+		"Preview": "Postcards/ForsakenCity",
+		"Map": "5"
 	}
 ]

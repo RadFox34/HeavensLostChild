@@ -10,37 +10,33 @@ public class Cassette : Actor, IHaveModels, IPickup, IHaveSprites, ICastPointSha
 	public float TCooldown = 0.0f;
 	public float TWiggle = 0.0f;
 
+	private const float TCooldownMax = 4.0f;
+
 	public Cassette(string map)
 	{
 		Map = map;
 		LocalBounds = new BoundingBox(Vec3.Zero, 3);
 		Model = new(Assets.Models["tape_1"]);
 		CollectedModel = new(Assets.Models["tape_2"]) { Flags = ModelFlags.Transparent };
-		foreach (var mat in CollectedModel.Materials)
-			mat.Color = Color.White * 0.50f;
 	}
 
 	public virtual float PickupRadius => 10;
-
-	public virtual bool IsCollected =>
-		!string.IsNullOrEmpty(Map) &&
-		Save.CurrentRecord.CompletedSubMaps.Contains(Map);
 
 	public override void Added()
 	{
 		LocalBounds = new BoundingBox(Vec3.Zero, 8);
 		// in case you spawn on it
-		TCooldown = 1.0f;
+		SetCooldown();
 	}
 
 	public virtual void SetCooldown()
 	{
-		TCooldown = 1.0f;
+		TCooldown = TCooldownMax;
 	}
 
 	public override void Update()
 	{
-		PointShadowAlpha = IsCollected ? 0.5f : 1.0f;
+		PointShadowAlpha = (TCooldown > 0) ? 0.5f : 1.0f;
 		Calc.Approach(ref TCooldown, 0, Time.Delta);
 		Calc.Approach(ref TWiggle, 0, Time.Delta / 0.7f);
 	}
@@ -53,13 +49,16 @@ public class Cassette : Actor, IHaveModels, IPickup, IHaveSprites, ICastPointSha
 			Matrix.CreateScale(Vec3.One * 2.5f * wiggle) *
 			Matrix.CreateTranslation(Vec3.UnitZ * MathF.Sin(World.GeneralTimer * 2.0f) * 2) *
 			Matrix.CreateRotationZ(World.GeneralTimer * 3.0f);
+		
+		foreach (var mat in CollectedModel.Materials)
+			mat.Color = Color.White * (1 - (TCooldown / (TCooldownMax * 2)));
 
-		populate.Add((this, IsCollected ? CollectedModel : Model));
+		populate.Add((this, (TCooldown > 0) ? CollectedModel : Model));
 	}
 
 	public virtual void Pickup(Player player)
 	{
-		if (!IsCollected && TCooldown <= 0.0f && !Game.Instance.IsMidTransition)
+		if (TCooldown <= 0.0f && !Game.Instance.IsMidTransition)
 		{
 			player.Stop();
 			player.EnterCassette(this);
