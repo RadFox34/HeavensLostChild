@@ -1,1 +1,0 @@
-dotnet restore && dotnet publish Celeste64.Launcher/Celeste64.Launcher.csproj -c Release -r win-x64 -o build && -r Content build
