@@ -14,9 +14,10 @@ public class Titlescreen : Scene
 
 	public Titlescreen()
 	{
-		model = new SkinnedModel(Assets.Models["logo"]);
 		//TitleMusic = Audio.PlayMusic("title1");
-		MusicWav = "title1";
+		MusicWav = "Titlescreen-WIP";
+
+		model = new SkinnedModel(Assets.Models["logo-WIP"]);
 	}
 
 	public override void Update()

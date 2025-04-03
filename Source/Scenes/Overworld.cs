@@ -191,7 +191,7 @@ public class Overworld : Scene
 	#region Overworld Constructor
 	public Overworld(bool startOnLastSelected)
 	{
-		MusicWav = "title1";
+		MusicWav = "Titlescreen-WIP";
 
 		var cardWidth = DefaultCardWidth / 6.0f;
 		var cardHeight = DefaultCardHeight / 6.0f;

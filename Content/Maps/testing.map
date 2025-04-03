@@ -3,7 +3,10 @@
 // entity 0
 {
 "classname" "worldspawn"
-"_tb_def" "external:D:/IMPORTANT/HeavensLostChild/Content/Celeste64.fgd"
+"_tb_def" "external:../Celeste64.fgd"
+"skybox" "bsides"
+"music" "mus_lvl1"
+"ambience" "mountain"
 // brush 0
 {
 ( -576 576 1472 ) ( -576 -576 1472 ) ( -576 -576 1216 ) rock_4 0 16 0 1 1

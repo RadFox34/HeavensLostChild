@@ -3,11 +3,8 @@
 // entity 0
 {
 "classname" "worldspawn"
-"_tb_textures" "Textures"
 "_tb_def" "external:../Celeste64.fgd"
 "skybox" "bsides"
-"snowAmount" ".5"
-"snowDirection" "0 0 -5"
 "music" "mus_lvl1"
 "ambience" "mountain"
 // brush 0
