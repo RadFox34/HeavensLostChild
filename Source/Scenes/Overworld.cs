@@ -191,7 +191,7 @@ public class Overworld : Scene
 	#region Overworld Constructor
 	public Overworld(bool startOnLastSelected)
 	{
-		Music = "event:/music/mus_title";
+		MusicWav = "title1";
 
 		var cardWidth = DefaultCardWidth / 6.0f;
 		var cardHeight = DefaultCardHeight / 6.0f;
@@ -399,8 +399,8 @@ public class Overworld : Scene
 				else
 				{
 					Audio.Play(Sfx.main_menu_start_game);
-					Game.Instance.Music.Stop();
-					Game.Instance.MusicWav?.Stop();
+					//Game.Instance.Music.Stop();
+					//Game.Instance.MusicWav?.Stop();
 					state = States.Entering;
 				}
 			}
@@ -419,8 +419,8 @@ public class Overworld : Scene
 				if (restartConfirmMenu.Index == 1)
 				{
 					Audio.Play(Sfx.main_menu_start_game);
-					Game.Instance.Music.Stop();
-					Game.Instance.MusicWav?.Stop();
+					//Game.Instance.Music.Stop();
+					//Game.Instance.MusicWav?.Stop();
 					Save.EraseRecord(entries[index].Level.ID);
 					state = States.Entering;
 				}
@@ -441,6 +441,9 @@ public class Overworld : Scene
 			if (cameraCloseUpEase >= 1.0f)
 			{
 				entries[index].Level.Enter(new SlideWipe(), 1.5f);
+			}
+			else if (Game.Instance.MusicWav.HasValue) { // Fade out music during transition
+				((SoundHandle)Game.Instance.MusicWav).Volume = MathF.Max(1.0f-cameraCloseUpEase, 0);
 			}
 		}
 		else if (Paused)

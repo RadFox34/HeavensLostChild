@@ -9,13 +9,14 @@ public class Titlescreen : Scene
 	private Vec2 wobble;
 	
 	//i wish it didn't take 3 days to figure out title screen music but at least i got to put the gbc version of National Park somewhere
-	private SoundHandle? TitleMusic;
+	//private SoundHandle? TitleMusic;
 
 
 	public Titlescreen()
 	{
 		model = new SkinnedModel(Assets.Models["logo"]);
-		TitleMusic = Audio.PlayMusic("title1");
+		//TitleMusic = Audio.PlayMusic("title1");
+		MusicWav = "title1";
 	}
 
 	public override void Update()
@@ -27,11 +28,11 @@ public class Titlescreen : Scene
 		{
 			Audio.Play(Sfx.main_menu_first_input);
 			
-			if (TitleMusic.HasValue)
+			/*if (TitleMusic.HasValue)
 			{
 					//oh my god Jazzrabbit you are amazing
 					TitleMusic.Value.Stop();
-			}
+			}*/
 			Game.Instance.Goto(new Transition()
 			{
 				Mode = Transition.Modes.Replace,
@@ -43,10 +44,10 @@ public class Titlescreen : Scene
 
 		if (Input.Keyboard.CtrlOrCommand && !Game.Instance.IsMidTransition && Settings.EnableQuickStart)
 		{
-			if (TitleMusic.HasValue)
+			/*if (TitleMusic.HasValue)
 			{
 					TitleMusic.Value.Stop();
-			}
+			}*/
 			var entry = new Overworld.Entry(Assets.Levels[0], null);
 			entry.Level.Enter();
 		}
