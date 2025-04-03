@@ -7,8 +7,11 @@ public class Overworld : Scene
 	#region Static Properties
 	public const int DefaultCardWidth = 480;
 	public const int DefaultCardHeight = 320;
+	public const int DefaultCardGap = 60;
+	public const int CardDepth = 30;
 	public static int CardWidth => (int)(DefaultCardWidth * Game.RelativeScale);
 	public static int CardHeight => (int)(DefaultCardHeight * Game.RelativeScale);
+	public static int CardGap => (int)(DefaultCardGap * Game.RelativeScale);
 	public const int ModIconSizeLarge = 48;
 	public const int ModIconSize = 40;
 	public const int ModIconLeftMargin = 16;
@@ -165,6 +168,7 @@ public class Overworld : Scene
 	public Menu? pauseMenu;
 
 	private int index = 0;
+	private float indexEase = 0;
 	private float slide = 0;
 	private float selectedEase = 0;
 	private float cameraCloseUpEase = 0;
@@ -272,7 +276,7 @@ public class Overworld : Scene
 	#region Update & Render
 	public override void Update()
 	{
-		slide += (index - slide) * (1 - MathF.Pow(.001f, Time.Delta));
+		slide += (index - slide) * (1 - MathF.Pow(.002f, Time.Delta));
 		wobble += (Controls.Camera.Value - wobble) * (1 - MathF.Pow(.1f, Time.Delta));
 		Calc.Approach(ref cameraCloseUpEase, state == States.Entering ? 1 : 0, Time.Delta);
 		Calc.Approach(ref selectedEase, state != States.Selecting ? 1 : 0, 8 * Time.Delta);
@@ -282,6 +286,7 @@ public class Overworld : Scene
 			var it = entries[i];
 			Calc.Approach(ref it.HighlightEase, index == i ? 1.0f : 0.0f, Time.Delta * 8.0f);
 			Calc.Approach(ref it.SelectionEase, index == i && (state == States.Selected || state == States.Restarting) ? 1.0f : 0.0f, Time.Delta * 4.0f);
+			Calc.Approach(ref indexEase, index, Time.Delta * 1.0f);
 
 			if (it.SelectionEase >= 0.50f && state == States.Selected)
 				it.Menu.Update();
@@ -489,10 +494,10 @@ public class Overworld : Scene
 		for (int i = 0; i < entries.Count; i++)
 		{
 			var it = entries[i];
-			var shift = Ease.Cube.In(1.0f - it.HighlightEase) * 30 - Ease.Cube.In(it.SelectionEase) * 30;
-			if (i != index)
-				shift += Ease.Cube.InOut(selectedEase) * 50;
-			var position = new Vec3((i - slide) * 60, shift, 0);
+			//var shift = Ease.Cube.In(1.0f - it.HighlightEase) * 30 - Ease.Cube.In(it.SelectionEase) * 30;
+			var shift = CardDepth * MathF.Abs(i - indexEase);
+			shift += ((i == index) ? -1.0f : 1.0f) * Ease.Cube.InOut(selectedEase) * CardDepth;
+			var position = new Vec3((i - slide) * CardGap, shift, 0);
 			var rotation = Ease.Cube.InOut(it.SelectionEase);
 			var matrix =
 				Matrix.CreateScale(new Vec3(it.SelectionEase >= 0.50f ? -1 : 1, 1, 1)) *

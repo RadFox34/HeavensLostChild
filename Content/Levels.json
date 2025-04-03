@@ -4,7 +4,7 @@
 		"Name": "Tutorial",
 		"Label": "Placeholder",
 		"Strawberries": 1,
-		"Preview": "Postcards/ForsakenCity",
+		"Preview": "Postcards/Tutorial",
 		"Map": "testing"
 	},
 	{
@@ -12,7 +12,7 @@
 		"Name": "Tower Pt 1",
 		"Label": "Placeholder",
 		"Strawberries": 1,
-		"Preview": "Postcards/ForsakenCity",
+		"Preview": "Postcards/Tower1",
 		"Map": "1"
 	},
 	{
@@ -20,7 +20,7 @@
 		"Name": "Tower Pt 2",
 		"Label": "Placeholder",
 		"Strawberries": 1,
-		"Preview": "Postcards/ForsakenCity",
+		"Preview": "Postcards/Tower2",
 		"Map": "2"
 	},
 	{
@@ -28,7 +28,7 @@
 		"Name": "Tower Pt 3",
 		"Label": "Placeholder",
 		"Strawberries": 1,
-		"Preview": "Postcards/ForsakenCity",
+		"Preview": "Postcards/Tower3",
 		"Map": "3"
 	},
 	{
@@ -36,7 +36,7 @@
 		"Name": "Tower Pt 4",
 		"Label": "Placeholder",
 		"Strawberries": 1,
-		"Preview": "Postcards/ForsakenCity",
+		"Preview": "Postcards/Tower4",
 		"Map": "4"
 	},
 	{
@@ -44,7 +44,7 @@
 		"Name": "Finale",
 		"Label": "Placeholder",
 		"Strawberries": 1,
-		"Preview": "Postcards/ForsakenCity",
+		"Preview": "Postcards/Finale",
 		"Map": "5"
 	}
 ]

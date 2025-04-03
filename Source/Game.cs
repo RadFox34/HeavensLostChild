@@ -28,7 +28,11 @@ public struct Transition
 		/// <summary>
 		/// Remove the current scene from the stack
 		/// </summary>
-		Pop
+		Pop,
+		/// <summary>
+		/// Clear the stack, then push scene
+		/// </summary>
+		Clear
 	}
 
 	/// <summary>
@@ -574,6 +578,12 @@ public class Game : Module
 					break;
 				case Transition.Modes.Pop:
 					scenes.Pop();
+					break;
+				case Transition.Modes.Clear:
+					Debug.Assert(transition.Scene != null);
+					while (scenes.Count > 0)
+						scenes.Pop();
+					scenes.Push(transition.Scene());
 					break;
 			}
 

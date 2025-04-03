@@ -53,7 +53,7 @@ public static class UI
 
 	public static void Strawberries(Batcher batch, int count, in Vec2 at, float align = 0)
 	{
-		Icon(batch, "icon_strawberry", $"x{count:00}  ", at, align);
+		Icon(batch, "icon_strawberry", $"x{count:0}  ", at, align);
 	}
 
 	public static void Deaths(Batcher batch, int count, in Vec2 at, float align = 0)
