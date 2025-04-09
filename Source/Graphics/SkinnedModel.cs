@@ -124,6 +124,14 @@ public class SkinnedModel : Model
 		playing.Add(b);
 	}
 
+	public float GetDuration(int index) {
+		return playing[index].Duration;
+	}
+
+	public float GetTime(int index) {
+		return playing[index].Time;
+	}
+
 	public void Clear()
 	{
 		playing.Clear();

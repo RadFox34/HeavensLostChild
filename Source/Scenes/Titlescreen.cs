@@ -5,35 +5,30 @@ public class Titlescreen : Scene
 	private readonly Batcher batch = new();
 	private readonly SkinnedModel model;
 	private float easing = 0;
-	private float inputDelay = 5.0f;
 	private Vec2 wobble;
-	
-	//i wish it didn't take 3 days to figure out title screen music but at least i got to put the gbc version of National Park somewhere
-	//private SoundHandle? TitleMusic;
 
 
 	public Titlescreen()
 	{
-		//TitleMusic = Audio.PlayMusic("title1");
 		MusicWav = "Titlescreen-WIP";
 
 		model = new SkinnedModel(Assets.Models["logo-WIP"]);
+		// TODO: remove this, its for testing while the animation isnt finished
+		model.Rate = 5;
+		model.SetLooping("Appear", false);
+		model.Play("Appear", true);
 	}
 
 	public override void Update()
 	{
-		easing = Calc.Approach(easing, 1, Time.Delta / 5.0f);
-		inputDelay = Calc.Approach(inputDelay, 0, Time.Delta);
+		model.Update();
+		easing = model.GetTime(0) / model.GetDuration(0);
+		//if (easing != 1) Console.WriteLine(easing);
 
 		if (Controls.Confirm.Pressed && !Game.Instance.IsMidTransition)
 		{
 			Audio.Play(Sfx.main_menu_first_input);
 			
-			/*if (TitleMusic.HasValue)
-			{
-					//oh my god Jazzrabbit you are amazing
-					TitleMusic.Value.Stop();
-			}*/
 			Game.Instance.Goto(new Transition()
 			{
 				Mode = Transition.Modes.Replace,
@@ -45,10 +40,6 @@ public class Titlescreen : Scene
 
 		if (Input.Keyboard.CtrlOrCommand && !Game.Instance.IsMidTransition && Settings.EnableQuickStart)
 		{
-			/*if (TitleMusic.HasValue)
-			{
-					TitleMusic.Value.Stop();
-			}*/
 			var entry = new Overworld.Entry(Assets.Levels[0], null);
 			entry.Level.Enter();
 		}
@@ -71,8 +62,8 @@ public class Titlescreen : Scene
 		var camera = new Camera
 		{
 			Target = target,
-			Position = Vec3.Lerp(camFrom, camTo, Ease.Cube.Out(easing)),
-			LookAt = new Vec3(0, 0, 70),
+			Position = new Vec3(0, -100, 0),
+			LookAt = new Vec3(0, 0, 0),
 			NearPlane = 10,
 			FarPlane = 300
 		};
@@ -82,12 +73,8 @@ public class Titlescreen : Scene
 			Camera = camera,
 			ModelMatrix =
 				Matrix.Identity *
-				Matrix.CreateScale(10) *
 				Matrix.CreateRotationX(wobble.Y) *
-				Matrix.CreateRotationZ(wobble.X) *
-				Matrix.CreateTranslation(0, 0, 53) *
-				Matrix.CreateRotationZ(-(1.0f - Ease.Cube.Out(easing)) * 10)
-				,
+				Matrix.CreateRotationZ(wobble.X),
 			Silhouette = false,
 			SunDirection = -Vec3.UnitZ,
 			VerticalFogColor = Color.White,
@@ -117,23 +104,22 @@ public class Titlescreen : Scene
 				new Vec2(0, 0), new Vec2(1, 0), new Vec2(1, 1), new Vec2(0, 1),
 				Color.White * 0.30f);
 
-			if (inputDelay <= 0)
+			if (easing < 1)
+			{
+				batch.PushBlend(BlendMode.Subtract);
+				batch.Rect(bounds, Color.White * (1 - Ease.Cube.Out(easing)));
+				batch.PopBlend();
+			}
+			else
 			{
 				var at = bounds.BottomRight + new Vec2(-16, -4) * Game.RelativeScale + new Vec2(0, -UI.PromptSize);
 				UI.Prompt(batch, Controls.Cancel, Loc.Str("Exit"), at, out var width, 1.0f);
 				at.X -= width + 8 * Game.RelativeScale;
 
 				UI.Prompt(batch, Controls.Confirm, Loc.Str("Confirm"), at, out _, 1.0f);
-				UI.Text(batch, Game.VersionString, bounds.BottomLeft + new Vec2(4, -24) * Game.RelativeScale, new Vec2(0, 1), Color.CornflowerBlue * 0.75f);
-				UI.Text(batch, Game.LoaderVersion, bounds.BottomLeft + new Vec2(4, -44) * Game.RelativeScale, new Vec2(0, 1), new Color(12326399) * 0.75f);
-				UI.Text(batch, "HLC v0.1", bounds.BottomLeft + new Vec2(4, -64) * Game.RelativeScale, new Vec2(0, 1), new Color(0xffffff) * 0.75f);
-			}
-
-			if (easing < 1)
-			{
-				batch.PushBlend(BlendMode.Subtract);
-				batch.Rect(bounds, Color.White * (1 - Ease.Cube.Out(easing)));
-				batch.PopBlend();
+				UI.Text(batch, Game.VersionString, bounds.BottomLeft + new Vec2(4, -4) * Game.RelativeScale, new Vec2(0, 1), Color.CornflowerBlue * 0.75f);
+				UI.Text(batch, Game.LoaderVersion, bounds.BottomLeft + new Vec2(4, -24) * Game.RelativeScale, new Vec2(0, 1), new Color(12326399) * 0.75f);
+				UI.Text(batch, "HLC v0.1", bounds.BottomLeft + new Vec2(4, -44) * Game.RelativeScale, new Vec2(0, 1), new Color(0xffffff) * 0.75f);
 			}
 
 			batch.Render(target);

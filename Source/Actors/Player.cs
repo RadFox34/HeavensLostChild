@@ -548,7 +548,8 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 			}
 			else
 			{
-				const float interval = 1f / 3;
+				//const float interval = 1f / 3;
+				const float interval = 1f / 5;
 				const float threshold = .1f;
 				if (CameraTargetDistance % interval < threshold || CameraTargetDistance % interval > interval - threshold)
 					Calc.Approach(ref CameraTargetDistance, Calc.Snap(CameraTargetDistance, interval), Time.Delta / 2);
@@ -759,7 +760,8 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 				}
 
 				World.Camera.Position += (cameraPos - World.Camera.Position) * (1 - MathF.Pow(0.01f, Time.Delta));
-				World.Camera.LookAt = lookAt;
+				//World.Camera.LookAt = lookAt;
+				World.Camera.LookAt += (lookAt - World.Camera.LookAt) * (1 - MathF.Pow(0.01f, Time.Delta));
 
 				float targetFOV = Calc.ClampedMap(velocity.XY().Length(), MaxSpeed * 1.2f, 120, 1, 1.2f);
 
@@ -832,9 +834,12 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 
 		// get default values
 		cameraLookAt = CameraOriginPos;
-		cameraPosition = cameraLookAt
+		/*cameraPosition = cameraLookAt
 			- CameraTargetForward * Utils.Lerp3(30, 60, 110, 110, CameraTargetDistance)
-			+ Vec3.UnitZ * Utils.Lerp3(1, 30, 80, 180, CameraTargetDistance);
+			+ Vec3.UnitZ * Utils.Lerp3(1, 30, 80, 180, CameraTargetDistance);*/
+		cameraPosition = cameraLookAt
+			- CameraTargetForward * Utils.Lerp5(1, 30, 60, 110, 110, 1, CameraTargetDistance)
+			+ Vec3.UnitZ * Utils.Lerp5(0, 1, 30, 80, 180, 180, CameraTargetDistance);
 		cameraLookAt += Vec3.UnitZ * 12;
 
 		// inside a fixed camera zone
@@ -2258,6 +2263,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 	{
 	}
 
+	// TODO: this is the strawberry cutscene code
 	public virtual CoEnumerator StStrawbRevealRoutine()
 	{
 		yield return Co.SingleFrame;

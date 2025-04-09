@@ -399,8 +399,6 @@ public class Overworld : Scene
 				else
 				{
 					Audio.Play(Sfx.main_menu_start_game);
-					//Game.Instance.Music.Stop();
-					//Game.Instance.MusicWav?.Stop();
 					state = States.Entering;
 				}
 			}
@@ -419,8 +417,6 @@ public class Overworld : Scene
 				if (restartConfirmMenu.Index == 1)
 				{
 					Audio.Play(Sfx.main_menu_start_game);
-					//Game.Instance.Music.Stop();
-					//Game.Instance.MusicWav?.Stop();
 					Save.EraseRecord(entries[index].Level.ID);
 					state = States.Entering;
 				}
@@ -497,7 +493,6 @@ public class Overworld : Scene
 		for (int i = 0; i < entries.Count; i++)
 		{
 			var it = entries[i];
-			//var shift = Ease.Cube.In(1.0f - it.HighlightEase) * 30 - Ease.Cube.In(it.SelectionEase) * 30;
 			var shift = CardDepth * MathF.Abs(i - indexEase);
 			shift += ((i == index) ? -1.0f : 1.0f) * Ease.Cube.InOut(selectedEase) * CardDepth;
 			var position = new Vec3((i - slide) * CardGap, shift, 0);

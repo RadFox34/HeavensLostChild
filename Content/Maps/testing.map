@@ -5,6 +5,8 @@
 "classname" "worldspawn"
 "_tb_def" "external:../Celeste64.fgd"
 "skybox" "bsides"
+"snowAmount" "0.5"
+"snowDirection" "0 0 -20"
 "music" "mus_lvl1"
 "ambience" "mountain"
 // brush 0

@@ -289,6 +289,19 @@ public static class Utils
 		else
 			return float.Lerp(c, d, (t - 2f / 3) * 3);
 	}
+	public static float Lerp5(float a, float b, float c, float d, float e, float f, float t)
+	{
+		if (t < 1f / 5)
+			return float.Lerp(a, b, t * 5);
+		else if (t < 2f / 5)
+			return float.Lerp(b, c, (t - 1f / 5) * 5);
+		else if (t < 3f / 5)
+			return float.Lerp(c, d, (t - 2f / 5) * 5);
+		else if (t < 4f / 5)
+			return float.Lerp(d, e, (t - 3f / 5) * 5);
+		else
+			return float.Lerp(e, f, (t - 4f / 5) * 5);
+	}
 
 	public static Vec3 Bezier(Vec3 a, Vec3 b, Vec3 c, float t)
 		=> Vec3.Lerp(Vec3.Lerp(a, b, t), Vec3.Lerp(b, c, t), t);
