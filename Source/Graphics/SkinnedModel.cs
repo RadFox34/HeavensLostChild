@@ -201,8 +201,8 @@ public class SkinnedModel : Model
 			{
 				result.Add((
 					playing[i].Index,
-					playing[i].Time % playing[i].Duration,
-					 1.0f - playing[i].Blend // why inverse?
+					(playing[i].Loops) ? playing[i].Time % playing[i].Duration : playing[i].Time, // WHY WAS IT REMAINDER IF IT ISNT LOOPING YOU WHORE
+					1.0f - playing[i].Blend // why inverse?
 				));
 
 				if (result.Count >= result.Capacity)

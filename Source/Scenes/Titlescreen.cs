@@ -13,8 +13,6 @@ public class Titlescreen : Scene
 		MusicWav = "Titlescreen-WIP";
 
 		model = new SkinnedModel(Assets.Models["logo-WIP"]);
-		// TODO: remove this, its for testing while the animation isnt finished
-		model.Rate = 5;
 		model.SetLooping("Appear", false);
 		model.Play("Appear", true);
 	}
@@ -62,8 +60,8 @@ public class Titlescreen : Scene
 		var camera = new Camera
 		{
 			Target = target,
-			Position = new Vec3(0, -100, 0),
-			LookAt = new Vec3(0, 0, 0),
+			Position = new Vec3(0, -100, 1000),
+			LookAt = new Vec3(0, 0, 1000),
 			NearPlane = 10,
 			FarPlane = 300
 		};
@@ -74,7 +72,8 @@ public class Titlescreen : Scene
 			ModelMatrix =
 				Matrix.Identity *
 				Matrix.CreateRotationX(wobble.Y) *
-				Matrix.CreateRotationZ(wobble.X),
+				Matrix.CreateRotationZ(wobble.X) *
+				Matrix.CreateTranslation(0, 0, 1000),
 			Silhouette = false,
 			SunDirection = -Vec3.UnitZ,
 			VerticalFogColor = Color.White,
@@ -90,7 +89,7 @@ public class Titlescreen : Scene
 			batch.SetSampler(new TextureSampler(TextureFilter.Linear, TextureWrap.ClampToEdge, TextureWrap.ClampToEdge));
 			var bounds = new Rect(0, 0, target.Width, target.Height);
 			var scroll = -new Vec2(1.25f, 0.9f) * (float)(Time.Duration.TotalSeconds) * 0.05f;
-
+			
 			batch.PushBlend(BlendMode.Add);
 			batch.PushSampler(new TextureSampler(TextureFilter.Linear, TextureWrap.Repeat, TextureWrap.Repeat));
 			batch.Image(Assets.Textures["overworld/overlay"],
