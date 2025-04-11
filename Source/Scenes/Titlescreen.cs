@@ -12,7 +12,7 @@ public class Titlescreen : Scene
 	{
 		MusicWav = "Titlescreen-WIP";
 
-		model = new SkinnedModel(Assets.Models["logo-WIP"]);
+		model = new SkinnedModel(Assets.Models["logo"]);
 		model.SetLooping("Appear", false);
 		model.Play("Appear", true);
 	}
@@ -52,18 +52,15 @@ public class Titlescreen : Scene
 	{
 		target.Clear(Color.Black, 1, 0, ClearMask.All);
 
-		var camFrom = new Vec3(0, -200, 60);
-		var camTo = new Vec3(00, -80, 50);
-
 		wobble += (Controls.Camera.Value - wobble) * (1 - MathF.Pow(.1f, Time.Delta));
 
 		var camera = new Camera
 		{
 			Target = target,
-			Position = new Vec3(0, -100, 1000),
-			LookAt = new Vec3(0, 0, 1000),
+			Position = new Vec3(0, 0, 1000),
+			LookAt = new Vec3(0, -1, 1000),
 			NearPlane = 10,
-			FarPlane = 300
+			FarPlane = 1000
 		};
 
 		var state = new RenderState()
@@ -71,15 +68,15 @@ public class Titlescreen : Scene
 			Camera = camera,
 			ModelMatrix =
 				Matrix.Identity *
-				Matrix.CreateRotationX(wobble.Y) *
-				Matrix.CreateRotationZ(wobble.X) *
+				//Matrix.CreateRotationX(wobble.Y) *
+				//Matrix.CreateRotationZ(wobble.X) * // Wobble was pretty but it didnt work very well with the new logo
 				Matrix.CreateTranslation(0, 0, 1000),
 			Silhouette = false,
 			SunDirection = -Vec3.UnitZ,
 			VerticalFogColor = Color.White,
 			DepthCompare = DepthCompare.Less,
 			DepthMask = true,
-			CutoutMode = false,
+			CutoutMode = true,
 		};
 
 		model.Render(ref state);
