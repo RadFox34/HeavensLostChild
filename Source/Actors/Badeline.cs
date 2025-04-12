@@ -2,13 +2,10 @@ namespace Celeste64;
 
 public class Badeline : NPC
 {
-	public virtual string TALK_FLAG => "BADELINE";
-
 	public readonly Hair Hair;
 	public virtual Color HairColor => 0x9B3FB5;
-	public Player? TalkingTo;
 
-	public Badeline() : base(Assets.Models["badeline"])
+	public Badeline() : base(Assets.Models["badeline"], "Baddy", 3)
 	{
 		Model.Play("Bad.Idle");
 
@@ -28,10 +25,6 @@ public class Badeline : NPC
 			ForwardOffsetPerNode = 0,
 			Nodes = 10
 		};
-
-		InteractHoverOffset = new Vec3(0, -2, 16);
-		InteractRadius = 32;
-		CheckForDialog();
 	}
 
 	public override void Update()
@@ -56,33 +49,11 @@ public class Badeline : NPC
 		}
 
 	}
-
-	public override void Interact(Player player)
-	{
-		TalkingTo = player;
-		World.Add(new Cutscene(Conversation));
-	}
-
-	public virtual CoEnumerator Conversation(Cutscene cs)
-	{
-		yield return Co.Run(cs.MoveToDistance(TalkingTo, Position.XY(), 16));
-		yield return Co.Run(cs.FaceEachOther(TalkingTo, this));
-
-		int index = Save.CurrentRecord.GetFlag(TALK_FLAG) + 1;
-		yield return Co.Run(cs.Say(Loc.Lines($"Baddy{index}")));
-		Save.CurrentRecord.IncFlag(TALK_FLAG);
-		CheckForDialog();
-	}
-
+	
 	public override void CollectModels(List<(Actor Actor, Model Model)> populate)
 	{
 		populate.Add((this, Hair));
 		base.CollectModels(populate);
-	}
-
-	public virtual void CheckForDialog()
-	{
-		InteractEnabled = Loc.HasLines($"Baddy{Save.CurrentRecord.GetFlag(TALK_FLAG) + 1}");
 	}
 }
 

@@ -269,3 +269,34 @@
 "origin" "856 -136 1752"
 "targetname" "MovingBlock2"
 }
+// entity 26
+{
+"classname" "Granny"
+"origin" "328 -504 1480"
+}
+// entity 27
+{
+"classname" "Theo"
+"origin" "264 -504 1480"
+}
+// entity 28
+{
+"classname" "Badeline"
+"origin" "200 -504 1480"
+}
+// entity 29
+{
+"classname" "SignPost"
+"origin" "136 -504 1480"
+"angle" "0"
+"dialog" "Sign1"
+}
+// entity 30
+{
+"classname" "NPC"
+"origin" "392 -264 1480"
+"angle" "90"
+"model" "Models/strawberry.glb"
+"living" "0"
+"dialog" "Sign4"
+}

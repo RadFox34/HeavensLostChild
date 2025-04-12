@@ -79,10 +79,22 @@ public class Map
 		))
 		{ UseSolidsAsBounds = true },
 		["Spring"] = new((map, entity) => new Spring()),
-		["Granny"] = new((map, entity) => new Granny()),
 		["Badeline"] = new((map, entity) => new Badeline()),
-		["Theo"] = new((map, entity) => new Theo()),
-		["SignPost"] = new((map, entity) => new Signpost(entity.GetStringProperty("dialog", string.Empty))),
+		["Theo"] = new((map, entity) => new NPC(Assets.Models["theo"], "Theo", 3)),
+		["Granny"] = new((map, entity) => new NPC(Assets.Models["granny"], "Granny", 3)),
+		["SignPost"] = new((map, entity) => new NPC(Assets.Models["sign"], entity.GetStringProperty("dialog", string.Empty), 0, false)),
+		["NPC"] = new((map, entity) => {
+			if (Assets.Models.TryGetValueFromFullPath(entity.GetStringProperty("model", "Models/sign.glb"), out var model))
+			{
+				return new NPC(
+					model, 
+					entity.GetStringProperty("dialog", string.Empty), 
+					entity.GetIntProperty("variants", 0), 
+					(entity.GetIntProperty("living", 1) > 0)
+				);
+			}
+			return null;
+		}),
 		["StaticProp"] = new((map, entity) =>
 		{
 			if (Assets.Models.TryGetValueFromFullPath(entity.GetStringProperty("model", string.Empty), out var model))

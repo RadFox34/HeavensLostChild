@@ -38,21 +38,30 @@
     bubbleto(string) : "Bubble To" : : "If assigned, Strawberry will bubble the player"
 ]
 
-@PointClass model({ "path": "Models/granny.glb", "scale": 12 }) = Granny : "She cool" 
+@PointClass model({ "path": "Models/granny.glb", "scale": 12 }) = Granny : "She cool (Shorthand NPC)" 
 [
 ]
 
-@PointClass model({ "path": "Models/theo.glb", "scale": 12 }) = Theo : "He's rad" 
+@PointClass model({ "path": "Models/theo.glb", "scale": 12 }) = Theo : "He's rad (Shorthand NPC)" 
 [
 ]
 
-@PointClass model({ "path": "Models/badeline.glb", "scale": 12 }) = Badeline : "She's bad" 
+@PointClass model({ "path": "Models/badeline.glb", "scale": 12 }) = Badeline : "She's bad (NPC with cool hair)" 
 [
 ]
 
-@PointClass model({ "path": "Models/sign.glb", "scale": 12 }) = SignPost : "Says some stuff" 
+@PointClass model({ "path": "Models/sign.glb", "scale": 12 }) = SignPost : "Says some stuff (Shorthand NPC)" 
 [
     dialog(string) : "Dialog Entry"
+    angle(integer) : "Sign Rotation"
+]
+
+@PointClass model({ "path": model }) = NPC : "Says some stuff better" 
+[
+    model(string) : "Model file path" : "Models/sign.glb" : "Set this to a 3D model file."
+    dialog(string) : "Dialog Entry" : : "The Dialogue to start when interacted with."
+    variants(integer) : "Dialogue Variants" : 0 : "The amount of Dialogues this NPC has. (e.g. Theo1, Theo2, Theo3 would be 3)"
+    living(integer) : "Living?" : 1 : "Whether this NPC should turn to face the Player."
     angle(integer) : "Sign Rotation"
 ]
 
