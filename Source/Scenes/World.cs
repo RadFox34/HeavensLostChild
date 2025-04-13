@@ -189,7 +189,7 @@ public class World : Scene
 		ModManager.Instance.CurrentLevelMod = ModManager.Instance.Mods.FirstOrDefault(mod => mod.Maps.ContainsKey(entry.Map));
 
 		Camera.NearPlane = 20;
-		Camera.FarPlane = 800;
+		Camera.FarPlane = 8000;
 		Camera.FOVMultiplier = 1;
 
 		strawbCounterWas = Save.CurrentRecord.Strawberries.Count;

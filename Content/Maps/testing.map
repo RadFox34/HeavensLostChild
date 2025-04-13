@@ -294,9 +294,9 @@
 // entity 30
 {
 "classname" "NPC"
-"origin" "392 -264 1480"
+"origin" "328 456 1480"
 "angle" "90"
-"model" "Models/strawberry.glb"
-"living" "0"
+"model" "Models/badeline.glb"
+"living" "1"
 "dialog" "Sign4"
 }
