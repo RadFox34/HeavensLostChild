@@ -283,6 +283,8 @@ public static class Audio
 
 	public static AudioHandle Create(string path)
 	{
+		Console.WriteLine(path);
+		//return new(); // TODO: We really shouldnt use this ever, but for now its fucking eerie without it
 		if (!string.IsNullOrEmpty(path) && events.TryGetValue(path, out var id))
 			return Create(id);
 		else

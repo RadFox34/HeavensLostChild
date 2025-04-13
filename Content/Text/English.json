@@ -864,6 +864,13 @@
 				"Voice": "credits/credits_13",
 				"Text": "And lastly, thank you to Celeste players everywhere.\nYour love and passion for our little game\ncontinues to inspire us."
 			}
+		],
+		"NewSign": [
+			{
+				"Face": "signpost",
+				"Voice": "National-Park",
+				"Text": "Hopefully!"
+			}
 		]
 	}
 }

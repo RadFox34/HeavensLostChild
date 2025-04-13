@@ -298,5 +298,5 @@
 "angle" "90"
 "model" "Models/badeline.glb"
 "living" "1"
-"dialog" "Sign4"
+"dialog" "NewSign"
 }

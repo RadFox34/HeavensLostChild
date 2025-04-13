@@ -57,8 +57,12 @@ public class Cutscene : Actor, IHaveUI
 		}
 
 		// start voice sound
-		if (!string.IsNullOrEmpty(voice))
-			Audio.Play($"event:/sfx/ui/dialog/{voice}");
+		if (!string.IsNullOrEmpty(voice)) {
+			AudioHandle FMod = Audio.Play($"event:/sfx/ui/dialog/{voice}");
+			if (!FMod){
+				Audio.PlaySound(voice);
+			}
+		}
 
 		// print out dialog
 		CurrentSaying.Talking = CurrentSaying.Text.Length > 3;
