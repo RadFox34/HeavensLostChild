@@ -163,7 +163,7 @@ public class Strawberry : Actor, IHaveModels, IHaveSprites, IPickup, ICastPointS
 	{
 		if (!IsCollecting && !IsLocked)
 		{
-			Audio.Play(World.Entry.Submap ? Sfx.sfx_collect_strawb_bside : Sfx.sfx_collect_strawb, Position);
+			Audio.PlaySound(World.Entry.Submap ? Sfx.sfx_collect_strawb_bside : Sfx.sfx_collect_strawb, Position);
 			IsCollecting = true;
 			player.StrawbGet(this);
 		}
@@ -178,7 +178,7 @@ public class Strawberry : Actor, IHaveModels, IHaveSprites, IPickup, ICastPointS
 		var toPosition = Position + toNormal * 70;
 
 		if (PlayUnlockSound)
-			Audio.Play(Sfx.sfx_secret, Position);
+			Audio.PlaySound(Sfx.sfx_secret, Position);
 		yield return 0.1f;
 
 		for (float t = 0; t < 1.0f; t += Time.Delta / 0.2f)
@@ -198,7 +198,7 @@ public class Strawberry : Actor, IHaveModels, IHaveSprites, IPickup, ICastPointS
 		yield return 0.1f;
 
 		IsLocked = false;
-		Audio.Play(Sfx.sfx_berry_appear, Position);
+		Audio.PlaySound(Sfx.sfx_berry_appear, Position);
 
 		for (float t = 0; t < 1; t += Time.Delta / .8f)
 		{

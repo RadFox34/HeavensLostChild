@@ -71,7 +71,7 @@ public class NPC : Actor, IHaveModels, IHaveSprites, IHavePushout, ICastPointSha
 	public override void LateUpdate()
 	{
 		if (!ShowHover && IsPlayerOver)
-			Audio.Play(Sfx.ui_npc_popup);
+			Audio.PlaySound(Sfx.ui_npc_popup);
 		ShowHover = IsPlayerOver;
 		IsPlayerOver = false;
 	}

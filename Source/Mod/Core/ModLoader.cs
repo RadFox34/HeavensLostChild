@@ -77,7 +77,7 @@ public static class ModLoader
 			CreateVanillaMod();
 		}
 
-		Log.Info($"Loading mods from: \n- {String.Join("\n- ", ModFolderPaths)}");
+		LogHelper.Info($"Loading mods from: \n- {String.Join("\n- ", ModFolderPaths)}");
 
 		List<(ModInfo ModInfo, IModFilesystem ModFs)> modInfos = [];
 
@@ -93,12 +93,12 @@ public static class ModLoader
 				if (info.Id == "Celeste64Vanilla" || modInfos.Any(data => data.Item1.Id == info.Id))
 				{
 					FailedToLoadMods.Add(modName);
-					Log.Error($"Fuji Error: Could not load mod from directory: {modName}, because a mod with that id already exists");
+					LogHelper.Error($"Fuji Error: Could not load mod from directory: {modName}, because a mod with that id already exists");
 				}
 				else
 				{
 					modInfos.Add((info, fs));
-					Log.Info($"Loaded mod from directory: {modName}");
+					LogHelper.Info($"Loaded mod from directory: {modName}");
 				}
 			}
 		}
@@ -115,12 +115,12 @@ public static class ModLoader
 				if (info.Id == "Celeste64Vanilla" || modInfos.Any(data => data.Item1.Id == info.Id))
 				{
 					FailedToLoadMods.Add(modName);
-					Log.Error($"Fuji Error: Could not load mod from zip: {modName}, because a mod with that id already exists");
+					LogHelper.Error($"Fuji Error: Could not load mod from zip: {modName}, because a mod with that id already exists");
 				}
 				else
 				{
 					modInfos.Add((info, fs));
-					Log.Info($"Loaded mod from zip: {modName}");
+					LogHelper.Info($"Loaded mod from zip: {modName}");
 				}
 			}
 		}
@@ -169,7 +169,7 @@ public static class ModLoader
 				foreach (var (info, _) in modInfos)
 				{
 					FailedToLoadMods.Add(info.Id);
-					Log.Error($"Mod '{info.Id} is missing following dependencies:");
+					LogHelper.Error($"Mod '{info.Id} is missing following dependencies:");
 
 					var missingDependencies = info.Dependencies.Where(dep =>
 					{
@@ -178,7 +178,7 @@ public static class ModLoader
 					});
 					foreach (var (modID, version) in missingDependencies)
 					{
-						Log.Error($" - ModID: '{modID}' Version: '{version}' ");
+						LogHelper.Error($" - ModID: '{modID}' Version: '{version}' ");
 					}
 				}
 				break;
@@ -197,7 +197,7 @@ public static class ModLoader
 			modListString.Append($"- [{(mod.Enabled ? "X" : " ")}] {mod.ModInfo.Id}, v{mod.ModInfo.Version}\n");
 		}
 
-		Log.Info(modListString);
+		LogHelper.Info(modListString.ToString());
 	}
 
 	internal static bool Load(ModInfo info, IModFilesystem fs)
@@ -262,7 +262,7 @@ public static class ModLoader
 
 	internal static void ReloadChangedMod(GameMod mod)
 	{
-		Log.Info($"Re-registering mod {mod.ModInfo.Id}");
+		LogHelper.Info($"Re-registering mod {mod.ModInfo.Id}");
 
 		// Re-register the changed mod to refresh its modules
 		ModManager.Instance.DeregisterMod(mod);
@@ -300,13 +300,13 @@ public static class ModLoader
 		if (!fs.TryOpenFile(Assets.FujiJSON, stream => JsonSerializer.Deserialize(stream, ModInfoContext.Default.ModInfo), out var info))
 		{
 			FailedToLoadMods.Add(modFolder);
-			Log.Error($"Fuji Error: Tried to load mod from {modFolder} but could not find a {Assets.FujiJSON} file");
+			LogHelper.Error($"Fuji Error: Tried to load mod from {modFolder} but could not find a {Assets.FujiJSON} file");
 			return null;
 		}
 		if (info != null && !info.IsValid())
 		{
 			FailedToLoadMods.Add(modFolder);
-			Log.Error($"Fuji Error: Invalid Fuji.json file for {Assets.FujiJSON} in {modFolder}");
+			LogHelper.Error($"Fuji Error: Invalid Fuji.json file for {Assets.FujiJSON} in {modFolder}");
 			return null;
 		}
 
@@ -325,7 +325,7 @@ public static class ModLoader
 		info.AssemblyContext = new ModAssemblyLoadContext(info, fs);
 		foreach (var assembly in info.AssemblyContext.Assemblies)
 		{
-			Log.Info($"Loaded assembly file '{assembly}' for mod {info.Id}");
+			LogHelper.Info($"Loaded assembly file '{assembly}' for mod {info.Id}");
 			anyDllFile = true;
 
 			foreach (var type in assembly.GetExportedTypes())
@@ -334,7 +334,7 @@ public static class ModLoader
 				{
 					if (loadedMod is { })
 					{
-						Log.Error($"Mod at {fs.Root} contains multiple classes extending from {typeof(GameMod)} " +
+						LogHelper.Error($"Mod at {fs.Root} contains multiple classes extending from {typeof(GameMod)} " +
 								  $"[{loadedMod.GetType().FullName} vs {type.FullName}]! Only the first one will be used!");
 						continue;
 					}
@@ -350,7 +350,7 @@ public static class ModLoader
 				{
 					if (loadedModSettings is { })
 					{
-						Log.Error($"Mod at {fs.Root} contains multiple classes extending from {typeof(GameModSettings)} " +
+						LogHelper.Error($"Mod at {fs.Root} contains multiple classes extending from {typeof(GameModSettings)} " +
 								  $"[{loadedModSettings.GetType().FullName} vs {type.FullName}]! Only the first one will be used!");
 						continue;
 					}
@@ -368,7 +368,7 @@ public static class ModLoader
 		{
 			if (loadedMod is null && anyDllFile)
 			{
-				Log.Warning($"Mod at {fs.Root} has assemblies, but none of them contain a public type extending from {typeof(GameMod)}.");
+				LogHelper.Warn($"Mod at {fs.Root} has assemblies, but none of them contain a public type extending from {typeof(GameMod)}.");
 			}
 
 			// Either no GameMod found or mod was disabled, so make a dummy one

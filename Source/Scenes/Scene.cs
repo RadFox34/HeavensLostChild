@@ -3,10 +3,8 @@ namespace Celeste64;
 public abstract class Scene
 {
 	public string Music = string.Empty;
+	public string AltMusic = string.Empty;
 	public string Ambience = string.Empty;
-
-	public string MusicWav = string.Empty;
-	public string AmbienceWav = string.Empty;
 
 	public virtual void Entered() { }
 	public virtual void Exited() { }

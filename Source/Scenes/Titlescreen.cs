@@ -10,7 +10,8 @@ public class Titlescreen : Scene
 
 	public Titlescreen()
 	{
-		MusicWav = "Titlescreen-WIP";
+		//Music = "mus_title";
+		Music = "Titlescreen-WIP";
 
 		model = new SkinnedModel(Assets.Models["logo"]);
 		model.SetLooping("Appear", false);
@@ -21,11 +22,10 @@ public class Titlescreen : Scene
 	{
 		model.Update();
 		easing = model.GetTime(0) / model.GetDuration(0);
-		//if (easing != 1) Console.WriteLine(easing);
 
 		if (Controls.Confirm.Pressed && !Game.Instance.IsMidTransition)
 		{
-			Audio.Play(Sfx.main_menu_first_input);
+			Audio.PlaySound(Sfx.main_menu_first_input);
 			
 			Game.Instance.Goto(new Transition()
 			{

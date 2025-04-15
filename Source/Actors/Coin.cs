@@ -53,9 +53,9 @@ public class Coin : Actor, IHaveModels, IHaveSprites, IPickup, ICastPointShadow
 		{
 			Collected = true;
 			if (!AnyRemaining(World))
-				Audio.Play(Sfx.sfx_touch_switch_last, Position);
+				Audio.PlaySound(Sfx.sfx_touch_switch_last, Position);
 			else
-				Audio.Play(Sfx.sfx_touch_switch_any, Position);
+				Audio.PlaySound(Sfx.sfx_touch_switch_any, Position);
 		}
 	}
 

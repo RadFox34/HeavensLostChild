@@ -2,37 +2,37 @@ namespace Celeste64;
 
 public class Sound(Actor following, string sound) : Actor
 {
-	public AudioHandle Handle;
+	public SoundHandle? Handle;
 	public Actor? Following = following;
 
 	public readonly string SoundEvent = sound;
 
 	public void Resume()
 	{
-		if (!Handle)
+		if (Handle is not null)
 		{
-			Handle.Stop();
-			Handle = Audio.Play(SoundEvent, Following?.Position);
+			((SoundHandle)Handle).Stop();
+			Handle = Audio.PlaySound(SoundEvent, Following?.Position);
 			UpdateOffScreen = true;
 		}
 	}
 
 	public void Stop()
 	{
-		Handle.Stop();
+		if (Handle is not null) ((SoundHandle)Handle).Stop();
 		UpdateOffScreen = false;
 	}
 
 	public override void LateUpdate()
 	{
-		if (Following != null)
+		/*if (Following != null)
 		{
 			Handle.Position = Following.Position;
 
 			if (Following is Solid solid)
 				Handle.Set("Velocity", solid.Velocity.Length());
 		}
-		else if (!Destroying)
+		else*/ if (!Destroying)
 		{
 			World.Destroy(this);
 		}

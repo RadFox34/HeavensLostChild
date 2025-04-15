@@ -50,8 +50,6 @@ public class ModControlsMenu : Menu
 						nameAttibute;
 				}
 
-				Menu.Item? newItem = null;
-
 				if (prop.GetCustomAttribute<SettingSpacerAttribute>() != null)
 				{
 					Add(new Spacer());

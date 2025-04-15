@@ -93,7 +93,7 @@ public class World : Scene
 
 	// Pause Menu, only drawn when actually paused
 	private Menu pauseMenu = new();
-	private AudioHandle pauseSnapshot;
+	//private AudioHandle pauseSnapshot;
 	private float PauseSaveDebounce = 0;
 
 	// Panic menu
@@ -116,6 +116,9 @@ public class World : Scene
 			return player.IsAbleToPause;
 		}
 	}
+
+	private bool IsInAltMusicArea => MainPlayer is { } player && (Overlaps<AltMusicArea>(player.Position) || IsInEndingArea);
+	private float altMusicVolume = 0;
 
 	private readonly Stopwatch debugUpdTimer = new();
 	private readonly Stopwatch debugRndTimer = new();
@@ -212,7 +215,7 @@ public class World : Scene
 			pauseMenu.Add(new Menu.Option("PauseRetry", () =>
 			{
 				SetPaused(false);
-				Audio.StopBus(Sfx.bus_dialog, false);
+				//Audio.StopBus(Sfx.bus_dialog, false);
 				MainPlayer?.Kill();
 			}));
 			if (Assets.EnabledSkins.Count > 1)
@@ -259,28 +262,9 @@ public class World : Scene
 			}
 
 			// Fuji Custom: Allows playing music and ambience from wav files if available.
-			// Otherwise, uses fmod events like normal.
-			if (map.Music != null && Assets.Music.ContainsKey(map.Music))
-			{
-				MusicWav = map.Music;
-				Music = $"event:/music/";
-			}
-			else
-			{
-				MusicWav = "";
-				Music = $"event:/music/{map.Music}";
-			}
-
-			if (map.Ambience != null && Assets.Music.ContainsKey(map.Ambience))
-			{
-				AmbienceWav = map.Ambience;
-				Ambience = $"event:/sfx/ambience/";
-			}
-			else
-			{
-				AmbienceWav = "";
-				Ambience = $"event:/sfx/ambience/{map.Ambience}";
-			}
+			// All events replaced with wav files.
+			Music = map.Music;
+			Ambience = map.Ambience;
 		}
 
 		ModManager.Instance.OnPreMapLoaded(this, map);
@@ -292,8 +276,8 @@ public class World : Scene
 
 		if (Entry.Reason == EntryReasons.Entered)
 		{
-			Log.Info($"Strawb Count: {adding.Where(x => x is Strawberry).Count()}");
-			Log.Info($"Loaded Map '{ModManager.Instance.CurrentLevelMod?.ModInfo.Id}:{Entry.Map}' in {stopwatch.ElapsedMilliseconds}ms");
+			LogHelper.Info($"Strawb Count: {adding.Where(x => x is Strawberry).Count()}");
+			LogHelper.Info($"Loaded Map '{ModManager.Instance.CurrentLevelMod?.ModInfo.Id}:{Entry.Map}' in {stopwatch.ElapsedMilliseconds}ms");
 		}
 		else
 		{
@@ -497,7 +481,7 @@ public class World : Scene
 			{
 				pauseMenu.CloseSubMenus();
 				SetPaused(false);
-				Audio.Play(Sfx.ui_unpause);
+				Audio.PlaySound(Sfx.ui_unpause);
 			}
 		}
 
@@ -518,15 +502,11 @@ public class World : Scene
 			Audio.SetListener(Camera);
 
 			// increment playtime (if not in the ending area)
-			if (!IsInEndingArea)
-			{
-				Save.CurrentRecord.Time += TimeSpan.FromSeconds(Time.Delta);
-				Game.Instance.Music.Set("at_baddy", 0);
-			}
-			else
-			{
-				Game.Instance.Music.Set("at_baddy", 1);
-			}
+			if (!IsInEndingArea) Save.CurrentRecord.Time += TimeSpan.FromSeconds(Time.Delta);
+			
+			Calc.Approach(ref altMusicVolume, IsInAltMusicArea ? 1 : 0, Time.Delta);
+			if (Game.Instance.Music.IsPlaying) Game.Instance.Music.Volume = 1.0f - altMusicVolume;
+			if (Game.Instance.AltMusic.IsPlaying) Game.Instance.AltMusic.Volume = altMusicVolume;
 
 			// handle strawb counter
 			{
@@ -572,7 +552,7 @@ public class World : Scene
 				if (Controls.Restart.ConsumePress() && MainPlayer is { Dead: false } livingPlayer)
 				{
 					SetPaused(false);
-					Audio.StopBus(Sfx.bus_dialog, false);
+					//Audio.StopBus(Sfx.bus_dialog, false);
 					livingPlayer?.Kill();
 					return;
 				}
@@ -675,18 +655,18 @@ public class World : Scene
 		}
 		if (paused != Paused)
 		{
-			Audio.SetBusPaused(Sfx.bus_gameplay, paused);
-			Audio.SetBusPaused(Sfx.bus_bside_music, paused);
+			//Audio.SetBusPaused(Sfx.bus_gameplay, paused);
+			//Audio.SetBusPaused(Sfx.bus_bside_music, paused);
 
 			if (paused)
 			{
-				Audio.Play(Sfx.ui_pause);
-				pauseSnapshot = Audio.Play(Sfx.snapshot_pause);
+				Audio.PlaySound(Sfx.ui_pause);
+				//pauseSnapshot = Audio.PlaySound(Sfx.snapshot_pause); //TODO Figure out wtf a snapshot is
 			}
 			else
 			{
 				pauseMenu.Index = 0;
-				pauseSnapshot.Stop();
+				//pauseSnapshot.Stop();
 			}
 
 			Controls.Consume();
@@ -1184,7 +1164,7 @@ public class World : Scene
 			throw error;
 		}
 
-		Audio.Play(Sfx.main_menu_restart_cancel);
+		Audio.PlaySound(Sfx.main_menu_restart_cancel);
 
 		Panicked = true;
 		badMapWarningMenu.Title = reason;

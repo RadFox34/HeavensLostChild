@@ -151,7 +151,7 @@ internal sealed class ModAssemblyLoadContext : AssemblyLoadContext
 				return asm;
 			}
 
-			Log.Warning($"Failed to load assembly '{asmName.FullName}' for mod '{info.Id}'");
+			LogHelper.Warn($"Failed to load assembly '{asmName.FullName}' for mod '{info.Id}'");
 			return null;
 		}
 	}
@@ -171,7 +171,7 @@ internal sealed class ModAssemblyLoadContext : AssemblyLoadContext
 			return handle.Value;
 		}
 
-		Log.Warning($"Failed to load native library '{name}' for mod '{info.Id}'");
+		LogHelper.Warn($"Failed to load native library '{name}' for mod '{info.Id}'");
 		return IntPtr.Zero;
 	}
 
@@ -339,7 +339,7 @@ internal sealed class ModAssemblyLoadContext : AssemblyLoadContext
 				}
 				else
 				{
-					Log.Warning($"Assembly name conflict for name '{asmName}' in mod '{info.Id}'!");
+					LogHelper.Warn($"Assembly name conflict for name '{asmName}' in mod '{info.Id}'!");
 				}
 
 				return assembly;

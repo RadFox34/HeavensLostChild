@@ -8,13 +8,13 @@ public class GateBlock(Vec3 end) : Solid
 	public Vec3 Start;
 	public Vec3 End = end;
 	public bool Opened;
-	public Sound? Sfx;
+	public Sound? SFX;
 
 	public readonly Routine Routine = new();
 
 	public override void Added()
 	{
-		Sfx = World.Add(new Sound(this, Celeste64.Sfx.sfx_touch_switch_gate_open_move));
+		SFX = World.Add(new Sound(this, Sfx.sfx_touch_switch_gate_open_move));
 		UpdateOffScreen = true;
 		Start = Position;
 	}
@@ -37,7 +37,7 @@ public class GateBlock(Vec3 end) : Solid
 	public virtual CoEnumerator Sequence()
 	{
 		TShake = .2f;
-		Sfx?.Resume();
+		SFX?.Resume();
 		yield return .2f;
 
 		var normal = (End - Position).Normalized();
@@ -47,9 +47,9 @@ public class GateBlock(Vec3 end) : Solid
 			yield return Co.SingleFrame;
 		}
 
-		Audio.Play(Celeste64.Sfx.sfx_touch_switch_gate_finish, Position);
-		Sfx?.Stop();
-		Sfx = null;
+		Audio.PlaySound(Sfx.sfx_touch_switch_gate_finish, Position);
+		SFX?.Stop();
+		SFX = null;
 		Velocity = Vec3.Zero;
 		MoveTo(End);
 		TShake = .2f;

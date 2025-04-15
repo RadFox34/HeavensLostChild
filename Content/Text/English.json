@@ -868,7 +868,7 @@
 		"NewSign": [
 			{
 				"Face": "signpost",
-				"Voice": "National-Park",
+				"Voice": "general/strawberry_get_bside",
 				"Text": "Hopefully!"
 			}
 		]

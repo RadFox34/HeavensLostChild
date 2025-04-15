@@ -36,7 +36,7 @@ public class Language
 		{
 			KnownMissingKeys.Add(key);
 
-			Log.Warning($"Attempt to access a missing dialog key: {key}");
+			LogHelper.Warn($"Attempt to access a missing dialog key: {key}");
 		}
 	}
 

@@ -34,8 +34,8 @@ public class Program
 
 		LogHelper.Initialize();
 
-		Log.Info($"Celeste 64 v.{Game.GameVersion.Major}.{Game.GameVersion.Minor}.{Game.GameVersion.Build}");
-		Log.Info(Game.LoaderVersion);
+		LogHelper.Info($"Celeste 64 v.{Game.GameVersion.Major}.{Game.GameVersion.Minor}.{Game.GameVersion.Build}");
+		LogHelper.Info(Game.LoaderVersion);
 
 		AppDomain.CurrentDomain.UnhandledException += (object sender, UnhandledExceptionEventArgs e) =>
 		{

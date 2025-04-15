@@ -112,13 +112,13 @@ public static class Assets
 		var langs = new ConcurrentBag<Language>();
 		var tasks = new List<Task>();
 
-		Log.Info($"Loading assets for {mod.ModInfo.Id}");
+		LogHelper.Info($"Loading assets for {mod.ModInfo.Id}");
 
 		IModFilesystem modFs = mod.Filesystem;
 
 		if (modFs == null)
 		{
-			Log.Error($"Failed to load assets for {mod.ModInfo.Id}. Mod FileSystem not initialized.");
+			LogHelper.Error($"Failed to load assets for {mod.ModInfo.Id}. Mod FileSystem not initialized.");
 			return;
 		}
 
@@ -314,7 +314,7 @@ public static class Assets
 			}
 			else
 			{
-				Log.Warning($"Improperly configured skin: {file}");
+				LogHelper.Warn($"Improperly configured skin: {file}");
 			}
 		}
 
@@ -485,7 +485,7 @@ public static class Assets
 
 		ModManager.Instance.OnAssetsLoaded();
 
-		Log.Info($"Loaded Assets in {timer.ElapsedMilliseconds}ms");
+		LogHelper.Info($"Loaded Assets in {timer.ElapsedMilliseconds}ms");
 	}
 
 	/// <summary>

@@ -89,7 +89,7 @@ public class Startup : Scene
 			// Update the current language after all mods have finished loading.
 			Language.Current.Use();
 
-			Log.Info($"Loaded Assets in {timer.ElapsedMilliseconds}ms");
+			LogHelper.Info($"Loaded Assets in {timer.ElapsedMilliseconds}ms");
 			ModManager.Instance.OnAssetsLoaded();
 
 			// enter game

@@ -191,7 +191,8 @@ public class Overworld : Scene
 	#region Overworld Constructor
 	public Overworld(bool startOnLastSelected)
 	{
-		MusicWav = "Titlescreen-WIP";
+		//Music = "mus_title";
+		Music = "Titlescreen-WIP";
 
 		var cardWidth = DefaultCardWidth / 6.0f;
 		var cardHeight = DefaultCardHeight / 6.0f;
@@ -267,7 +268,7 @@ public class Overworld : Scene
 
 		entries = GetCurrentModEntries();
 
-		Audio.Play(Sfx.main_menu_postcard_flip);
+		Audio.PlaySound(Sfx.main_menu_postcard_flip);
 
 		wobble = new Vec2(0, dir * 0.25f);
 	}
@@ -330,14 +331,14 @@ public class Overworld : Scene
 			index = Calc.Clamp(index, 0, entries.Count - 1);
 
 			if (was != index)
-				Audio.Play(Sfx.ui_move);
+				Audio.PlaySound(Sfx.ui_move);
 
 			if (Controls.Confirm.Released && !Paused)
 			{
 				if (WasBigSlide) { WasBigSlide = false; return; }
 				state = States.Selected;
 				entries[index].Menu.Index = 0;
-				Audio.Play(Sfx.main_menu_postcard_flip);
+				Audio.PlaySound(Sfx.main_menu_postcard_flip);
 			}
 
 			if (Controls.Cancel.ConsumePress())
@@ -382,7 +383,7 @@ public class Overworld : Scene
 						Paused = false;
 					}));
 
-					Audio.Play(Sfx.ui_pause);
+					Audio.PlaySound(Sfx.ui_pause);
 				}
 			}
 		}
@@ -392,19 +393,19 @@ public class Overworld : Scene
 			{
 				if (entries[index].Menu.Index == 1)
 				{
-					Audio.Play(Sfx.main_menu_restart_confirm_popup);
+					Audio.PlaySound(Sfx.main_menu_restart_confirm_popup);
 					restartConfirmMenu.Index = 0;
 					state = States.Restarting;
 				}
 				else
 				{
-					Audio.Play(Sfx.main_menu_start_game);
+					Audio.PlaySound(Sfx.main_menu_start_game);
 					state = States.Entering;
 				}
 			}
 			else if (Controls.Cancel.ConsumePress())
 			{
-				Audio.Play(Sfx.main_menu_postcard_flip_back);
+				Audio.PlaySound(Sfx.main_menu_postcard_flip_back);
 				state = States.Selecting;
 			}
 		}
@@ -416,19 +417,19 @@ public class Overworld : Scene
 			{
 				if (restartConfirmMenu.Index == 1)
 				{
-					Audio.Play(Sfx.main_menu_start_game);
+					Audio.PlaySound(Sfx.main_menu_start_game);
 					Save.EraseRecord(entries[index].Level.ID);
 					state = States.Entering;
 				}
 				else
 				{
-					Audio.Play(Sfx.main_menu_restart_cancel);
+					Audio.PlaySound(Sfx.main_menu_restart_cancel);
 					state = States.Selected;
 				}
 			}
 			else if (Controls.Cancel.ConsumePress())
 			{
-				Audio.Play(Sfx.main_menu_restart_cancel);
+				Audio.PlaySound(Sfx.main_menu_restart_cancel);
 				state = States.Selected;
 			}
 		}
@@ -438,8 +439,8 @@ public class Overworld : Scene
 			{
 				entries[index].Level.Enter(new SlideWipe(), 1.5f);
 			}
-			else if (Game.Instance.MusicWav.HasValue) { // Fade out music during transition
-				((SoundHandle)Game.Instance.MusicWav).Volume = MathF.Max(1.0f-cameraCloseUpEase, 0);
+			else { // Fade out music during transition
+				Game.Instance.Music.Volume = MathF.Max(1.0f-cameraCloseUpEase, 0);
 			}
 		}
 		else if (Paused)
@@ -459,7 +460,7 @@ public class Overworld : Scene
 				{
 					Game.Instance.ReloadAssets(false);
 				}
-				Audio.Play(Sfx.ui_unpause);
+				Audio.PlaySound(Sfx.ui_unpause);
 				Paused = false;
 			}
 		}

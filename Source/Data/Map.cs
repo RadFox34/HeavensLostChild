@@ -30,8 +30,9 @@ public class Map
 	public readonly string? Skybox;
 	public readonly float SnowAmount;
 	public readonly Vec3 SnowWind;
-	public readonly string? Music;
-	public readonly string? Ambience;
+	public readonly string Music = "";
+	public readonly string AltMusic = "";
+	public readonly string Ambience = "";
 	public readonly int? ChunkSize;
 
 	public readonly bool isMalformed = false;
@@ -118,6 +119,7 @@ public class Map
 		["NonClimbableBlock"] = new((map, entity) => new NonClimbableBlock()) { IsSolidGeometry = true },
 		["DoubleDashPuzzleBlock"] = new((map, entity) => new DoubleDashPuzzleBlock()) { IsSolidGeometry = true },
 		["EndingArea"] = new((map, entity) => new EndingArea()) { UseSolidsAsBounds = true },
+		["AltMusicArea"] = new((map, entity) => new AltMusicArea()) { UseSolidsAsBounds = true },
 		["Fog"] = new((map, entity) => new FogRing(entity)),
 		["FixedCamera"] = new((map, entity) => new FixedCamera(map.FindTargetNodeFromParam(entity, "target"))) { UseSolidsAsBounds = true },
 		["IntroCar"] = new((map, entity) => new IntroCar(entity.GetFloatProperty("scale", 6))),
@@ -174,8 +176,9 @@ public class Map
 			Skybox = Data.Worldspawn.GetStringProperty("skybox", "city");
 			SnowAmount = Data.Worldspawn.GetFloatProperty("snowAmount", 1);
 			SnowWind = Data.Worldspawn.GetVectorProperty("snowDirection", -Vec3.UnitZ);
-			Music = Data.Worldspawn.GetStringProperty("music", string.Empty);
-			Ambience = Data.Worldspawn.GetStringProperty("ambience", string.Empty);
+			Music = Data.Worldspawn.GetStringProperty("music", "mus_lvl1");
+			AltMusic = Data.Worldspawn.GetStringProperty("altmusic", "mus_lvl1_at_baddy");
+			Ambience = Data.Worldspawn.GetStringProperty("ambience", "mountain");
 			ChunkSize = Data.Worldspawn.GetIntProperty("chunksize", 1000);
 		}
 

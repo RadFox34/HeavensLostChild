@@ -26,12 +26,12 @@ public class BreakBlock : Solid, IDashTrigger
 		var options = (Transparent ? GlassShards : WoodShards);
 
 		if (Secret)
-			Audio.Play(Sfx.sfx_secret, Position);
+			Audio.PlaySound(Sfx.sfx_secret, Position);
 
 		if (Transparent)
-			Audio.Play(Sfx.sfx_glassbreak, Position);
+			Audio.PlaySound(Sfx.sfx_glassbreak, Position);
 		else
-			Audio.Play(Sfx.sfx_breakable_wall_wood, Position);
+			Audio.PlaySound(Sfx.sfx_breakable_wall_wood, Position);
 
 		for (int i = 0; i < amount; i++)
 		{

@@ -14,9 +14,9 @@ public class SpotlightWipe() : ScreenWipe(EaseDuration)
 	public override void Start()
 	{
 		if (IsFromBlack)
-			Audio.Play(Sfx.ui_spotlight_in);
+			Audio.PlaySound(Sfx.ui_spotlight_in);
 		else
-			Audio.Play(Sfx.ui_spotlight_out);
+			Audio.PlaySound(Sfx.ui_spotlight_out);
 	}
 
 	public override void Step(float percent)

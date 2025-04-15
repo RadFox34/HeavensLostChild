@@ -174,11 +174,9 @@ public class Game : Module
 
 	private ImGuiManager imGuiManager;
 
-	public AudioHandle Ambience;
-	public AudioHandle Music;
-
-	public SoundHandle? AmbienceWav;
-	public SoundHandle? MusicWav;
+	public SoundHandle Music = new();
+	public SoundHandle AltMusic = new();
+	public SoundHandle Ambience = new();
 
 	private Task? SaveTask;
 	private SavingState _SaveSt = SavingState.Ready;
@@ -211,7 +209,7 @@ public class Game : Module
 	{
 		if (IsDynamicRes)
 		{
-			Log.Warning("Dynamic resolution is an experimental feature. Certain UI elements may not be adjusted correctly.");
+			LogHelper.Warn("Dynamic resolution is an experimental feature. Certain UI elements may not be adjusted correctly.");
 		}
 
 		OnResolutionChanged += () =>
@@ -316,7 +314,7 @@ public class Game : Module
 		scenes.Clear();
 		instance = null;
 
-		Log.Info("Shutting down...");
+		LogHelper.Info("Shutting down...");
 	}
 
 	public bool IsMidTransition => transitionStep != TransitionStep.None;
@@ -481,7 +479,7 @@ public class Game : Module
 		}
 		else if (transitionStep == TransitionStep.Perform)
 		{
-			Audio.StopBus(Sfx.bus_gameplay_world, false);
+			//Audio.StopBus(Sfx.bus_gameplay_world, false);
 
 			// exit last scene
 			if (scenes.TryPeek(out var lastScene))
@@ -529,7 +527,7 @@ public class Game : Module
 							reloadList.Append($"\n- {mod.ModInfo.Id}");
 						}
 
-						Log.Info(reloadList);
+						LogHelper.Info(reloadList.ToString());
 					}
 
 					while (modsToReload.Count > 0)
@@ -611,49 +609,42 @@ public class Game : Module
 
 			// switch music
 			{
-				var last = Music.IsPlaying && lastScene != null ? lastScene.Music : string.Empty;
-				var next = nextScene?.Music ?? string.Empty;
-				if (next != last)
+				string last = Music is { IsPlaying: true } && lastScene != null ? lastScene.Music : string.Empty;
+				string next = nextScene?.Music ?? string.Empty;
+				if (last != next)
 				{
 					Music.Stop();
-					Music = Audio.Play(next);
-					if (Music)
-						Music.SetCallback(audioEventCallback);
+					SoundHandle? music = Audio.PlayMusic(next);
+					if (music is not null) {
+						Music = (SoundHandle)music;
+					}
 				}
+			}
 
-				string lastWav = MusicWav is { IsPlaying: true } && lastScene != null ? lastScene.MusicWav : string.Empty;
-				string nextWav = nextScene?.MusicWav ?? string.Empty;
-				if (lastWav != nextWav)
+			// switch alt-music
+			{
+				string last = AltMusic is { IsPlaying: true } && lastScene != null ? lastScene.AltMusic : string.Empty;
+				string next = nextScene?.AltMusic ?? string.Empty;
+				if (last != next)
 				{
-					MusicWav?.Stop();
-					if (!string.IsNullOrEmpty(nextWav))
-					{
-						MusicWav = Audio.PlayMusic(nextWav);
+					AltMusic.Stop();
+					SoundHandle? altMusic = Audio.PlayMusic(next);
+					if (altMusic is not null) {
+						AltMusic = (SoundHandle)altMusic;
 					}
 				}
 			}
 
 			// switch ambience
 			{
-				var last = Ambience.IsPlaying && lastScene != null ? lastScene.Ambience : string.Empty;
-				var next = nextScene?.Ambience ?? string.Empty;
-				if (next != last)
+				string last = Ambience is { IsPlaying: true } && lastScene != null ? lastScene.Ambience : string.Empty;
+				string next = nextScene?.Ambience ?? string.Empty;
+				if (last != next)
 				{
 					Ambience.Stop();
-					if (!string.IsNullOrEmpty(next))
-					{
-						Ambience = Audio.Play(next);
-					}
-				}
-
-				string lastWav = AmbienceWav is { IsPlaying: true } && lastScene != null ? lastScene.AmbienceWav : string.Empty;
-				string nextWav = nextScene?.AmbienceWav ?? string.Empty;
-				if (lastWav != nextWav)
-				{
-					AmbienceWav?.Stop();
-					if (string.IsNullOrEmpty(nextWav))
-					{
-						AmbienceWav = Audio.PlayMusic(nextWav);
+					SoundHandle? ambience = Audio.PlayMusic(next);
+					if (ambience is not null){
+						Ambience = (SoundHandle)ambience;
 					}
 				}
 			}
@@ -699,7 +690,7 @@ public class Game : Module
 
 			if (Controls.ReloadAssets.ConsumePress() && !IsMidTransition)
 			{
-				Log.Info($"--- User has initiated a{(Input.Keyboard.CtrlOrCommand ? " full" : string.Empty)} manual reload. ---");
+				LogHelper.Info($"--- User has initiated a{(Input.Keyboard.CtrlOrCommand ? " full" : string.Empty)} manual reload. ---");
 				ReloadAssets(Input.Keyboard.CtrlOrCommand); // F5 - Reload changed; Ctrl + F5 - Reload all
 			}
 		}

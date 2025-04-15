@@ -35,7 +35,7 @@ public class TrafficBlock(Vec3 end) : Solid
 			while (!HasPlayerRider())
 				yield return Co.SingleFrame;
 
-			Audio.Play(Sfx.sfx_zipmover_start, Position);
+			Audio.PlaySound(Sfx.sfx_zipmover_start, Position);
 			TShake = .15f;
 			UpdateOffScreen = true;
 			yield return .15f;
@@ -56,13 +56,13 @@ public class TrafficBlock(Vec3 end) : Solid
 				MoveTo(target);
 			}
 
-			Audio.Play(Sfx.sfx_zipmover_stop, Position);
+			Audio.PlaySound(Sfx.sfx_zipmover_stop, Position);
 			TShake = .2f;
 			yield return .8f;
 
 			// Move back to start
 			{
-				Audio.Play(Sfx.sfx_zipmover_retract_start, Position);
+				Audio.PlaySound(Sfx.sfx_zipmover_retract_start, Position);
 				SfxRetract?.Resume();
 				var target = Start;
 				var normal = (target - Position).Normalized();
@@ -79,7 +79,7 @@ public class TrafficBlock(Vec3 end) : Solid
 
 			//Reactivate
 			{
-				Audio.Play(Sfx.sfx_zipmover_retract_stop, Position);
+				Audio.PlaySound(Sfx.sfx_zipmover_retract_stop, Position);
 				TShake = .1f;
 				UpdateOffScreen = false;
 				yield return .5f;

@@ -25,7 +25,7 @@ public class DefaultMaterial : Material
 	{
 		if (!(Shader?.Has(MatrixUniformName) ?? false))
 		{
-			Log.Warning($"Shader '{Shader?.Name}' is missing '{MatrixUniformName}' uniform");
+			LogHelper.Warn($"Shader '{Shader?.Name}' is missing '{MatrixUniformName}' uniform");
 		}
 
 		Texture = texture;

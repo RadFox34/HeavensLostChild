@@ -15,7 +15,7 @@ public class Cutscene : Actor, IHaveUI
 		public bool Talking;
 	}
 	public Saying CurrentSaying;
-	public AudioHandle DialogSnapshot;
+	//public AudioHandle DialogSnapshot;
 	public float Timer = 0;
 
 	public bool FreezeGame = false;
@@ -30,8 +30,8 @@ public class Cutscene : Actor, IHaveUI
 
 	public override void Destroyed()
 	{
-		Audio.StopBus(Sfx.bus_dialog, false);
-		DialogSnapshot.Stop();
+		//Audio.StopBus(Sfx.bus_dialog, false);
+		//DialogSnapshot.Stop();
 	}
 
 	public virtual CoEnumerator Say(List<Language.Line> lines)
@@ -41,13 +41,13 @@ public class Cutscene : Actor, IHaveUI
 			yield return Co.Run(Say(line.Face, line.Text, line.Voice));
 		}
 
-		Audio.StopBus(Sfx.bus_dialog, false);
+		//Audio.StopBus(Sfx.bus_dialog, false);
 	}
 
 	public virtual CoEnumerator Say(string face, string line, string? voice = null)
 	{
 		CurrentSaying = new Saying() { Face = $"faces/{face}", Text = line, Talking = false };
-		DialogSnapshot = Audio.Play(Sfx.snapshot_dialog);
+		//DialogSnapshot = Audio.PlaySound(Sfx.snapshot_dialog); //TODO Figure out wtf a snapshot is
 
 		// ease in
 		while (CurrentSaying.Ease < 1.0f)
@@ -57,12 +57,7 @@ public class Cutscene : Actor, IHaveUI
 		}
 
 		// start voice sound
-		if (!string.IsNullOrEmpty(voice)) {
-			AudioHandle FMod = Audio.Play($"event:/sfx/ui/dialog/{voice}");
-			if (!FMod){
-				Audio.PlaySound(voice);
-			}
-		}
+		if (voice is not null) Audio.PlaySound(voice);
 
 		// print out dialog
 		CurrentSaying.Talking = CurrentSaying.Text.Length > 3;
@@ -90,7 +85,7 @@ public class Cutscene : Actor, IHaveUI
 		CurrentSaying.Talking = false;
 		while (!Controls.Confirm.Pressed && !Controls.Cancel.Pressed)
 			yield return Co.SingleFrame;
-		Audio.Play(Sfx.ui_dialog_advance);
+		Audio.PlaySound(Sfx.ui_dialog_advance);
 
 		// ease out
 		while (CurrentSaying.Ease > 0.0f)
@@ -99,7 +94,7 @@ public class Cutscene : Actor, IHaveUI
 			yield return Co.SingleFrame;
 		}
 
-		DialogSnapshot.Stop();
+		//DialogSnapshot.Stop();
 		CurrentSaying = new();
 	}
 
@@ -172,7 +167,7 @@ public class Cutscene : Actor, IHaveUI
 
 	public virtual CoEnumerator PerformCutscene()
 	{
-		Audio.Play(Sfx.sfx_readsign_in);
+		Audio.PlaySound(Sfx.sfx_readsign_in);
 
 		while (Ease < 1.0f)
 		{
@@ -182,7 +177,7 @@ public class Cutscene : Actor, IHaveUI
 
 		yield return Co.Run(Running(this));
 
-		Audio.Play(Sfx.sfx_readsign_out);
+		Audio.PlaySound(Sfx.sfx_readsign_out);
 
 		while (Ease < 1.0f)
 		{

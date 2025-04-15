@@ -4,6 +4,7 @@
 	snowAmount(float) : "Amount of Snow"
 	snowDirection(vector) : "Snow move direction"
 	music(string) : "Music"
+	altmusic(string) : "Alt Music"
 	ambience(string) : "Ambience"
 	chunksize(int) : "Chunk Size" : "Used for determining chunk size when merging brushes together."
 ]
@@ -172,7 +173,11 @@
     canwalljump(string)  : "Can the player wall jump off of this" : "true"
 ]
 
-@SolidClass = EndingArea : "Where the game ends"
+@SolidClass = EndingArea : "Where the game ends (acts as an AltMusicArea)"
+[
+	
+]
+@SolidClass = AltMusicArea : "Fades Music to AltMusic"
 [
 	
 ]

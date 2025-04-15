@@ -61,7 +61,7 @@ public class Menu
 		public GameMod? Mod => mod;
 		public override bool Pressed()
 		{
-			Audio.Play(Sfx.ui_select);
+			Audio.PlaySound(Sfx.ui_select);
 			rootMenu?.PushSubMenu(new BindControlMenu(rootMenu, button, locString, isForController, DeadZone, mod));
 			return true;
 		}
@@ -92,7 +92,7 @@ public class Menu
 		{
 			if (submenu != null)
 			{
-				Audio.Play(Sfx.ui_select);
+				Audio.PlaySound(Sfx.ui_select);
 				submenu.Index = 0;
 				rootMenu?.PushSubMenu(submenu);
 				return true;
@@ -208,7 +208,7 @@ public class Menu
 		{
 			if (action != null)
 			{
-				Audio.Play(Sfx.ui_select);
+				Audio.PlaySound(Sfx.ui_select);
 				action();
 				return true;
 			}
@@ -234,9 +234,9 @@ public class Menu
 		{
 			action();
 			if (get())
-				Audio.Play(Sfx.main_menu_toggle_on);
+				Audio.PlaySound(Sfx.main_menu_toggle_on);
 			else
-				Audio.Play(Sfx.main_menu_toggle_off);
+				Audio.PlaySound(Sfx.main_menu_toggle_off);
 			return true;
 		}
 	}
@@ -255,7 +255,7 @@ public class Menu
 
 		public override void Slide(int dir)
 		{
-			Audio.Play(Sfx.ui_select);
+			Audio.PlaySound(Sfx.ui_select);
 
 			int index = get();
 			if (index < options.Count() - 1 && dir == 1)
@@ -470,7 +470,7 @@ public class Menu
 			}
 
 			if (was != Index)
-				Audio.Play(step < 0 ? UpSound : DownSound);
+				Audio.PlaySound(step < 0 ? UpSound : DownSound);
 
 			if (MControlH.Negative.Pressed || MControlH.Negative.Repeated)
 				items[Index].Slide(-1);
@@ -504,7 +504,7 @@ public class Menu
 
 			if (!IsInMainMenu && Controls.Cancel.ConsumePress())
 			{
-				Audio.Play(Sfx.main_menu_toggle_off);
+				Audio.PlaySound(Sfx.main_menu_toggle_off);
 				var popped = GetSecondDeepestMenu(this).submenus.Pop();
 				popped.Closed();
 			}

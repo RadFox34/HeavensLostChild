@@ -552,7 +552,7 @@ public abstract class GameMod
 		}
 		else
 		{
-			Log.Warning($"An actor factory with the name {name} was already loaded. Factory won't be loaded.");
+			LogHelper.Warn($"An actor factory with the name {name} was already loaded. Factory won't be loaded.");
 		}
 	}
 

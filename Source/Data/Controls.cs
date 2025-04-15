@@ -510,7 +510,6 @@ public static class Controls
 	internal static void ResetAllBindings(bool forController, GameMod? mod = null)
 	{
 		ControlsConfig_V01 config;
-		IEnumerable<ControlsConfigBinding> defaultBindings;
 		Type settingsType;
 		object? settingsObject;
 

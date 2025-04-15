@@ -33,7 +33,7 @@ public static class Audio
 		studioFlags |= INITFLAGS.LIVEUPDATE;
 #endif
 
-		Log.Info($"FMOD Bindings: v{FMOD.VERSION.number:x}");
+		LogHelper.Info($"FMOD Bindings: v{FMOD.VERSION.number:x}");
 
 		// Dynamically load FMOD binaries. For some reason this is the only way
 		// I could make M1 Macs properly load the FMOD .dylib files ???
@@ -48,7 +48,7 @@ public static class Audio
 		// get the core system & version number
 		Check(system.getCoreSystem(out var core));
 		Check(core.getVersion(out var version));
-		Log.Info($"FMOD: v{version:x}");
+		LogHelper.Info($"FMOD: v{version:x}");
 
 		// Initialize FMOD
 		Check(system.initialize(1024, studioFlags, flags, IntPtr.Zero));
@@ -165,12 +165,19 @@ public static class Audio
 	}
 
 	// Fuji Custom
+	public static SoundHandle? PlaySound(string name, System.Numerics.Vector3? shh)
+	{
+		return PlaySound(name);
+	}
+
+	// Fuji Custom
 	public static SoundHandle? PlaySound(string name, int loopCount = 0, int loopStart = 0, int loopEnd = int.MaxValue)
 	{
 		if (Assets.Sounds.TryGetValue(name, out var sound))
 		{
 			return PlaySoundInChannel(sound, SoundEffectGroup, loopCount, loopStart, loopEnd);
 		}
+		LogHelper.Error($"Sound Effect File {name}(.wav) doesn't exist");
 		return null;
 	}
 
@@ -187,6 +194,7 @@ public static class Audio
 		{
 			return PlaySoundInChannel(song, MusicGroup, loopCount, loopStart, loopEnd);
 		}
+		LogHelper.Error($"Music File {name}(.wav) doesn't exist");
 		return null;
 	}
 
@@ -271,7 +279,7 @@ public static class Audio
 			var result = system.getEventByID(id, out var desc);
 			if (result != FMOD.RESULT.OK)
 			{
-				Log.Warning($"Failed to create Audio Event Instance: {result}");
+				LogHelper.Warn($"Failed to create Audio Event Instance: {result}");
 				return new AudioHandle();
 			}
 
@@ -283,12 +291,13 @@ public static class Audio
 
 	public static AudioHandle Create(string path)
 	{
-		Console.WriteLine(path);
-		//return new(); // TODO: We really shouldnt use this ever, but for now its fucking eerie without it
+		LogHelper.Info($"FMod Event {path} called upon.");
+		return new(); //Don't Play FMod Events
+
 		if (!string.IsNullOrEmpty(path) && events.TryGetValue(path, out var id))
 			return Create(id);
 		else
-			Log.Warning($"Audio Event {path} doesn't exist");
+			LogHelper.Warn($"Audio Event {path} doesn't exist");
 		return new();
 	}
 
@@ -297,7 +306,7 @@ public static class Audio
 		var result = desc.createInstance(out var instance);
 		if (result != FMOD.RESULT.OK)
 		{
-			Log.Warning($"Failed to create Audio Event Instance: {result}");
+			LogHelper.Warn($"Failed to create Audio Event Instance: {result}");
 			return new AudioHandle();
 		}
 

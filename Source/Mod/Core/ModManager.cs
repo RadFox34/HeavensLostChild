@@ -117,7 +117,7 @@ public sealed class ModManager
 				filepath.ToLower() == Assets.LevelsJSON.ToLower() ||
 				filepath.ToLower() == Assets.FujiJSON.ToLower())
 			{
-				Log.Info($"File Changed: {filepath} (From mod {ctx.Mod.ModInfo.Name}). {(Settings.EnableAutoReload ? "Reloading assets." : "Queued for reload.")}");
+				LogHelper.Info($"File Changed: {filepath} (From mod {ctx.Mod.ModInfo.Name}). {(Settings.EnableAutoReload ? "Reloading assets." : "Queued for reload.")}");
 			}
 			else
 			{
@@ -127,7 +127,7 @@ public sealed class ModManager
 		}
 		else
 		{
-			Log.Info($"Mod archive for mod {ctx.Mod.ModInfo.Name} changed. {(Settings.EnableAutoReload ? "Reloading assets." : "Queued for reload.")}");
+			LogHelper.Info($"Mod archive for mod {ctx.Mod.ModInfo.Name} changed. {(Settings.EnableAutoReload ? "Reloading assets." : "Queued for reload.")}");
 		}
 		ctx.Mod.SetNeedsReloadRecursive();
 		if (Settings.EnableAutoReload) Game.Instance.ReloadAssets(false);
