@@ -167,7 +167,7 @@ public static class Audio
 	// Fuji Custom
 	public static SoundHandle? PlaySound(string name, System.Numerics.Vector3? shh)
 	{
-		LogHelper.Warn("Sound with position playing, Position ignored.")
+		LogHelper.Warn("Sound with position playing, Position ignored.");
 		return PlaySound(name);
 	}
 
