@@ -293,13 +293,11 @@ public static class Audio
 	public static AudioHandle Create(string path)
 	{
 		LogHelper.Info($"FMod Event {path} called upon.");
-		return new(); //Don't Play FMod Events
-
-		if (!string.IsNullOrEmpty(path) && events.TryGetValue(path, out var id))
+		/*if (!string.IsNullOrEmpty(path) && events.TryGetValue(path, out var id))
 			return Create(id);
 		else
-			LogHelper.Warn($"Audio Event {path} doesn't exist");
-		return new();
+			LogHelper.Warn($"Audio Event {path} doesn't exist");*/
+		return new(); //Don't Play FMod Events
 	}
 
 	private static AudioHandle Create(in EventDescription desc)
