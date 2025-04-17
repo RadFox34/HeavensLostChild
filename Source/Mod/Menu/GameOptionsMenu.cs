@@ -47,6 +47,7 @@ public class GameOptionsMenu : Menu
 		Title = Loc.Str("OptionsTitle");
 		Add(new Toggle("OptionsFullscreen", Settings.ToggleFullscreen, () => Settings.Fullscreen));
 		Add(new Toggle("OptionsZGuide", Settings.ToggleZGuide, () => Settings.ZGuide));
+		Add(new Toggle("OptionsCheckpoints", Settings.ToggleCheckpoints, () => Settings.Checkpoints)); //TODO get rid of this.
 		Add(new Toggle("OptionsTimer", Settings.ToggleTimer, () => Settings.SpeedrunTimer));
 		Add(new Toggle("OptionsVSync", Settings.ToggleVSync, () => Settings.VSync));
 		if (Assets.Languages.Count > 1)

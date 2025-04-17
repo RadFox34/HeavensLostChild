@@ -3,14 +3,16 @@ namespace Celeste64;
 public class Checkpoint : Actor, IHaveModels, IPickup, IHaveSprites
 {
 	public readonly string CheckpointName;
+	public readonly bool HardModePersistent;
 	public SkinnedModel ModelOff;
 	public SkinnedModel ModelOn;
 
 	public float TWiggle = 0.0f;
 
-	public Checkpoint(string name)
+	public Checkpoint(string name, bool hardPersist = false)
 	{
 		CheckpointName = name;
+		HardModePersistent = hardPersist;
 		LocalBounds = new BoundingBox(Vec3.Zero, 8);
 		ModelOff = new(Assets.Models["flag_off"]);
 		ModelOff.Play("Idle");
@@ -43,12 +45,13 @@ public class Checkpoint : Actor, IHaveModels, IPickup, IHaveSprites
 
 	public virtual void CollectModels(List<(Actor Actor, Model Model)> populate)
 	{
+		if (!HardModePersistent && !Settings.Checkpoints) return;
 		populate.Add((this, CurrentModel));
 	}
 
 	public virtual void Pickup(Player player)
 	{
-		if (!IsCurrent)
+		if (!IsCurrent && (Settings.Checkpoints || HardModePersistent))
 		{
 			Audio.PlaySound(Sfx.sfx_checkpoint, Position);
 
@@ -62,6 +65,7 @@ public class Checkpoint : Actor, IHaveModels, IPickup, IHaveSprites
 
 	public virtual void CollectSprites(List<Sprite> populate)
 	{
+		if (!HardModePersistent && !Settings.Checkpoints) return;
 		var haloPos = Position + Vec3.UnitZ * 16;
 		var haloCol = new Color(IsCurrent ? 0x7fde46 : 0xdf5ab4) * .4f;
 		populate.Add(Sprite.CreateBillboard(World, haloPos, "gradient", 12, haloCol * 0.40f));

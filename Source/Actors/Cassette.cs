@@ -29,7 +29,7 @@ public class Cassette : Actor, IHaveModels, IPickup, IHaveSprites, ICastPointSha
 		SetCooldown();
 	}
 
-	public virtual void SetCooldown()
+	public void SetCooldown()
 	{
 		TCooldown = TCooldownMax;
 	}

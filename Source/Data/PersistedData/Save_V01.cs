@@ -32,6 +32,11 @@ public sealed class Save_V01 : PersistedData
 	public bool SpeedrunTimer { get; set; } = false;
 
 	/// <summary>
+	/// If Checkpoints should be enabled
+	/// </summary>
+	public bool Checkpoints { get; set; } = true;
+
+	/// <summary>
 	/// 0-10 Music volume level
 	/// </summary>
 	public int MusicVolume { get; set; } = 10;

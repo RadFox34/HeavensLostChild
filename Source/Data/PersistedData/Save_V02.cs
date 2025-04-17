@@ -91,6 +91,7 @@ public sealed class Save_V02 : VersionedPersistedData<Save_V01>
 			newSettings.SpeedrunTimer = oldSave.SpeedrunTimer;
 			newSettings.WriteLog = oldSave.WriteLog;
 			newSettings.ZGuide = oldSave.ZGuide;
+			newSettings.Checkpoints = oldSave.Checkpoints;
 			Settings.Instance = newSettings;
 			Settings.SaveToFile();
 		}

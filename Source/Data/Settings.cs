@@ -32,6 +32,11 @@ public sealed class Settings
 	public static bool SpeedrunTimer => Instance.SpeedrunTimer;
 
 	/// <summary>
+	/// If Checkpoints should be enabled
+	/// </summary>
+	public static bool Checkpoints => Instance.Checkpoints;
+
+	/// <summary>
 	/// 0-10 Music volume level
 	/// </summary>
 	public static int MusicVolume => Instance.MusicVolume;
@@ -121,6 +126,11 @@ public sealed class Settings
 	public static void ToggleZGuide()
 	{
 		Instance.ZGuide = !Instance.ZGuide;
+	}
+
+	public static void ToggleCheckpoints()
+	{
+		Instance.Checkpoints = !Instance.Checkpoints;
 	}
 
 	public static void ToggleVSync()

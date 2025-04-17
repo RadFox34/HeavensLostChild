@@ -117,7 +117,7 @@ public class World : Scene
 		}
 	}
 
-	private bool IsInAltMusicArea => MainPlayer is { } player && (Overlaps<AltMusicArea>(player.Position) || IsInEndingArea);
+	private bool IsInAltMusicArea => MainPlayer is { } player && Overlaps<AltMusicArea>(player.Position);
 	private float altMusicVolume = 0;
 
 	private readonly Stopwatch debugUpdTimer = new();

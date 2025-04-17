@@ -49,8 +49,10 @@ public class Map
 			Vec3? bubbleTo = null;
 			if (map.FindTargetNode(entity.GetStringProperty("bubbleto", string.Empty), out var point))
 				bubbleTo = point;
+			var checkpointless = entity.GetIntProperty("hardOnly", 0) > 0;
+			var exitBerry = entity.GetIntProperty("exitBerry", 0) > 0;
 			map.LoadStrawberryCounter++;
-			return new Strawberry(id, isLocked, lockedCondition, playUnlockSound, bubbleTo);
+			return new Strawberry(id, isLocked, lockedCondition, playUnlockSound, bubbleTo, checkpointless, exitBerry);
 		}),
 		["Refill"] = new((map, entity) => new Refill(entity.GetIntProperty("double", 0) > 0)),
 		["Cassette"] = new((map, entity) => new Cassette(entity.GetStringProperty("map", string.Empty))),
@@ -350,20 +352,18 @@ public class Map
 		else if (entity.ClassName == "PlayerSpawn")
 		{
 			var name = entity.GetStringProperty("name", StartCheckpoint);
+			var hardPersist = entity.GetIntProperty("hardPersist", 0) > 0;
 
 			// spawns ther player if the world entry is this checkpoint
 			// OR the world entry has no checkpoint and we're the start
 			// OR the world entry checkpoint is misconfigured and we're the start
-			var spawnsPlayer =
-				(world.Entry.CheckPoint == name) ||
-				(string.IsNullOrEmpty(world.Entry.CheckPoint) && name == StartCheckpoint) ||
-				(!Checkpoints.Contains(world.Entry.CheckPoint) && name == StartCheckpoint);
+			var spawnsPlayer = (world.Entry.CheckPoint == name && Settings.Checkpoints) || name == StartCheckpoint;
 
 			if (spawnsPlayer)
 				HandleActorCreation(world, entity, new Player(), null);
 
-			if (name != StartCheckpoint)
-				HandleActorCreation(world, entity, new Checkpoint(name), null);
+			//if (name != StartCheckpoint)
+				HandleActorCreation(world, entity, new Checkpoint(name, hardPersist), null);
 
 		}
 		else if (ActorFactories.TryGetValue(entity.ClassName, out var factory))

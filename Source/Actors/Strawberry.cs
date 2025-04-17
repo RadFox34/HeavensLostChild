@@ -8,32 +8,40 @@ public class Strawberry : Actor, IHaveModels, IHaveSprites, IPickup, ICastPointS
 	public virtual float Pulse => Calc.ClampedMap(World.GeneralTimer % 3, 0, 0.25f, 0, 1);
 	public float PickupRadius => 12;
 
-	public virtual bool IsCollected =>
-		!string.IsNullOrEmpty(ID) &&
-		Save.CurrentRecord.Strawberries.Contains(ID);
-
 	public Color HaloColor = 0xeed14f;
 	public virtual float PointShadowAlpha { get; set; } = 1.0f;
 
+	public virtual bool IsCollecting { get; protected set; }
+	public virtual bool IsCollected { get; protected set; }
 	public virtual bool IsLocked { get; protected set; }
-	public readonly string ID;
+	public readonly string ID = "";
 	public readonly string UnlockConditionGroup;
 	public readonly Vec3? BubbleTo;
 	public readonly bool PlayUnlockSound;
+	public readonly bool Checkpointless;
+	public readonly bool ExitBerry;
 
-	public bool IsCollecting = false;
+	private const float TCooldownMax = 4.0f;
+	public float TCooldown = 0.0f;
 	public readonly List<Actor> UnlockConditions = [];
 	public float CheckConditionsOffset;
 	public float ScaleMultiplier = 1;
+	private Vector3 Origin;
 
-	public Strawberry(string id, bool isLocked, string? unlockCondition, bool unlockSound, Vec3? bubbleTo)
+	public Strawberry(string id, bool isLocked, string? unlockCondition, bool unlockSound, Vec3? bubbleTo = null, bool checkpointless = false, bool exitBerry = false)
 	{
 		ID = id;
 		IsLocked = isLocked;
 		UnlockConditionGroup = unlockCondition ?? string.Empty;
 		PlayUnlockSound = unlockSound;
 		BubbleTo = bubbleTo;
-		Model = new(Assets.Models["strawberry"]) { Transform = Matrix.CreateScale(3) };
+		Checkpointless = checkpointless;
+		ExitBerry = exitBerry;
+		Model = Checkpointless ? 
+			new(Assets.Models["strawberry"]) : 
+			new(Assets.Models["strawberry"]);
+		Model.Flags = ModelFlags.Transparent;
+		Model.MakeMaterialsUnique();
 		Model.Materials[0].Effects = 0;
 		LocalBounds = new BoundingBox(Vec3.Zero, 10);
 		Particles = new(32, new ParticleTheme()
@@ -44,7 +52,14 @@ public class Strawberry : Actor, IHaveModels, IHaveSprites, IPickup, ICastPointS
 			Gravity = new Vec3(0, 0, 80),
 			Size = 1.2f
 		});
+		IsCollected = Save.CurrentRecord.Strawberries.Contains(ID);
+	}
 
+	public void Reset() {
+		IsCollecting = false;
+		TCooldown = TCooldownMax;
+		Position = Origin;
+		Model.Flags = ModelFlags.Transparent;
 	}
 
 	public override void Added()
@@ -68,6 +83,7 @@ public class Strawberry : Actor, IHaveModels, IHaveSprites, IPickup, ICastPointS
 		}
 
 		UpdateOffScreen = IsLocked;
+		Origin = Position;
 	}
 
 	public override void Update()
@@ -92,31 +108,23 @@ public class Strawberry : Actor, IHaveModels, IHaveSprites, IPickup, ICastPointS
 			return;
 		}
 
-		PointShadowAlpha = IsCollected ? 0.5f : 1.0f;
+		if (!IsCollecting) IsCollected = Save.CurrentRecord.Strawberries.Contains(ID);
 
-		if (!IsCollected || IsCollecting)
+		PointShadowAlpha = (IsCollected || TCooldown > 0) ? 0.5f : 1.0f;
+		Calc.Approach(ref TCooldown, 0, Time.Delta);
+
+		if ((!IsCollected || IsCollecting) && !(Checkpointless && Settings.Checkpoints))
 		{
 			Particles.SpawnParticle(
 				Position + new Vec3(6 - World.Rng.Float() * 12, 6 - World.Rng.Float() * 12, 6 - World.Rng.Float() * 12),
 				new Vec3(0, 0, 0), 1);
 			Particles.Update(Time.Delta);
 		}
-		else
-		{
-			Model.MakeMaterialsUnique();
-			Model.Flags = ModelFlags.Transparent;
-
-			foreach (var mat in Model.Materials)
-			{
-				mat.Texture = Assets.Textures["white"];
-				mat.Color = new Color(0x99ddf4) * 0.70f;
-			}
-		}
 	}
 
 	public virtual void CollectSprites(List<Sprite> populate)
 	{
-		if (IsCollected || IsLocked)
+		if (IsCollected || IsLocked || (Checkpointless && Settings.Checkpoints))
 			return;
 
 		var haloPos = Position + Vec3.UnitZ * 2 + Vec3.Transform(Vec3.Zero, Model.Transform);
@@ -138,7 +146,7 @@ public class Strawberry : Actor, IHaveModels, IHaveSprites, IPickup, ICastPointS
 		if (!IsLocked)
 		{
 			var scale = 3.0f;
-			if (!IsCollected && !IsCollecting)
+			if (!IsCollected && !IsCollecting && !(Checkpointless && Settings.Checkpoints))
 				scale += Ease.Back.In(Ease.UpDown(Pulse)) * 0.50f;
 			scale *= ScaleMultiplier;
 
@@ -154,6 +162,18 @@ public class Strawberry : Actor, IHaveModels, IHaveSprites, IPickup, ICastPointS
 					Matrix.CreateTranslation(Vec3.UnitZ * MathF.Sin(World.GeneralTimer * 2.0f) * 2) *
 					Matrix.CreateRotationZ(World.GeneralTimer * 3.0f);
 			}
+			foreach (var mat in Model.Materials) {
+				Color color = Color.White;
+				if (IsCollected) {
+					mat.Texture = Assets.Textures["white"];
+					color = new Color(0x99ddf4) * 0.75f;
+				}
+				if (Checkpointless && Settings.Checkpoints) {
+					color *= 0.5f;
+				}
+				color *= (1 - (TCooldown / (TCooldownMax * 2)));
+				mat.Color = color;
+			}
 
 			populate.Add((this, Model));
 		}
@@ -161,7 +181,7 @@ public class Strawberry : Actor, IHaveModels, IHaveSprites, IPickup, ICastPointS
 
 	public virtual void Pickup(Player player)
 	{
-		if (!IsCollecting && !IsLocked)
+		if (!IsCollecting && !IsLocked && !(Checkpointless && Settings.Checkpoints) && TCooldown <= 0.0f)
 		{
 			Audio.PlaySound(World.Entry.Submap ? Sfx.sfx_collect_strawb_bside : Sfx.sfx_collect_strawb, Position);
 			IsCollecting = true;

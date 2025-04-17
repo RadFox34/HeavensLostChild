@@ -76,6 +76,7 @@
 {
 "classname" "Strawberry"
 "origin" "-184 -168 1560"
+"exitBerry" "1"
 }
 // entity 6
 {
@@ -299,4 +300,23 @@
 "model" "Models/badeline.glb"
 "living" "1"
 "dialog" "NewSign"
+}
+// entity 31
+{
+"classname" "Strawberry"
+"origin" "-184 -40 1560"
+"hardOnly" "1"
+}
+// entity 32
+{
+"classname" "PlayerSpawn"
+"origin" "368 144 1472"
+"name" "A"
+}
+// entity 33
+{
+"classname" "PlayerSpawn"
+"origin" "368 -80 1472"
+"name" "B"
+"hardPersist" "1"
 }

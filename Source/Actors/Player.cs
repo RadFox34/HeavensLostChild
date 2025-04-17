@@ -2003,7 +2003,8 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		}
 
 		if (LastStrawb != null)
-			World.Destroy(LastStrawb);
+			LastStrawb.Reset();
+			LastStrawb = null;
 	}
 
 	public virtual void StStrawbGetUpdate()
@@ -2034,11 +2035,9 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 				Saving = true
 			});
 		}
-		else
+		else if (LastStrawb != null && LastStrawb.ExitBerry)
 		{
-			//TODO we might want to make this a boolean on the strawberry object or something, to allow level-finish berries inside of submaps
-			
-			//After collecting a strawberry (completing tower section) return to the level select menu
+			//After collecting an ExitBerry (completing tower section) return to the level select menu
 			Game.Instance.Goto(new Transition()
 			{
 				Mode = Transition.Modes.Clear,
@@ -2049,8 +2048,8 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 				StopMusic = true,
 				Saving = true
 			});
-			//StateMachine.State = States.Normal;
 		}
+		else { StateMachine.State = States.Normal; }
 	}
 
 	public virtual void StrawbGet(Strawberry strawb)

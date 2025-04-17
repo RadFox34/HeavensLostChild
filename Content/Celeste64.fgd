@@ -30,6 +30,7 @@
 @PointClass size(-16 -16 0, 16 16 32) = PlayerSpawn : "Player start position" 
 [
     name(string) : "Name" : "Start"
+    hardPersist(integer) : "HardMode Persistent" : 0 : "Makes this Checkpoint visible even in Hard Mode"
 ]
 
 @PointClass model({ "path": "Models/strawberry.glb", "scale": 12 }) = Strawberry : "Strawb Get!" 
@@ -37,6 +38,8 @@
     locked(integer) : "Locked" : 0
     targetname(string) : "Target Name"
     bubbleto(string) : "Bubble To" : : "If assigned, Strawberry will bubble the player"
+    hardOnly(integer) : "HardMode only" : 0 : "Marks the Berry as uncollectable if playing with checkpoints"
+    exitBerry(integer) : "Exit Berry" : 0 : "Marks the Berry as a Level Exit"
 ]
 
 @PointClass model({ "path": "Models/granny.glb", "scale": 12 }) = Granny : "She cool (Shorthand NPC)" 
@@ -173,7 +176,7 @@
     canwalljump(string)  : "Can the player wall jump off of this" : "true"
 ]
 
-@SolidClass = EndingArea : "Where the game ends (acts as an AltMusicArea)"
+@SolidClass = EndingArea : "Where the game ends"
 [
 	
 ]
