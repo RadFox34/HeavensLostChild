@@ -65,7 +65,11 @@ public class SkinnedModel : Model
 
 	public void SetLooping(string name, bool looping)
 	{
-		var index = IndexOf(name);
+		SetLooping(IndexOf(name), looping);
+	}
+
+	public void SetLooping(int index, bool looping)
+	{
 		if (index >= 0)
 			loops[index] = looping;
 	}
@@ -80,12 +84,15 @@ public class SkinnedModel : Model
 	public void Play(string name, bool restart = false)
 	{
 		var index = IndexOf(name);
-		if (index >= 0)
-			Play(index, restart);
+		Play(index, restart);
 	}
 
 	public void Play(int index, bool restart = false)
 	{
+		if (index < 0) {
+			//LogHelper.Warn("Could not play animation "+index+". Out of Range");
+			return;
+		}
 		var it = RequestPlayingStruct(index);
 
 		// snap if we have nothing to blend from
@@ -125,11 +132,21 @@ public class SkinnedModel : Model
 	}
 
 	public float GetDuration(int index) {
-		return playing[index].Duration;
+		if (index >= 0 && index < playing.Count)
+			return playing[index].Duration;
+		return -1;
 	}
 
 	public float GetTime(int index) {
-		return playing[index].Time;
+		if (index >= 0 && index < playing.Count)
+			return playing[index].Time;
+		return -1;
+	}
+
+	public int GetAnimation(int index) {
+		if (index >= 0 && index < playing.Count)
+			return playing[index].Index;
+		return -1;
 	}
 
 	public void Clear()

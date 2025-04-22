@@ -33,11 +33,11 @@
 	},
 	{
 		"ID": "4_HEAVEN_TOWER",
-		"Name": "Tower Pt 4",
+		"Name": "Tower Pt 4 (Pika)",
 		"Label": "Placeholder",
 		"Strawberries": 1,
 		"Preview": "Postcards/Tower4",
-		"Map": "4"
+		"Map": "climb"
 	},
 	{
 		"ID": "5_FINALE",

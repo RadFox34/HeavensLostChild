@@ -7,7 +7,6 @@ public class Titlescreen : Scene
 	private float easing = 0;
 	private Vec2 wobble;
 
-
 	public Titlescreen()
 	{
 		//Music = "mus_title";
@@ -21,7 +20,14 @@ public class Titlescreen : Scene
 	public override void Update()
 	{
 		model.Update();
-		easing = model.GetTime(0) / model.GetDuration(0);
+		LogHelper.Info(model.GetAnimation(0)+": "+model.GetTime(0)+", "+model.GetDuration(0));
+		if (model.GetAnimation(0) == 0){
+			easing = model.GetTime(0) / model.GetDuration(0);
+			if (easing >= 1.0f) {
+				model.Clear();
+				model.Play("Idle");
+			}
+		}
 
 		if (Controls.Confirm.Pressed && !Game.Instance.IsMidTransition)
 		{
